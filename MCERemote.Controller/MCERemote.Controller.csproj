@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{263E230A-2B68-44CB-8F56-6EDDEDA06ABE}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>MCERemote.Controller</RootNamespace>
+    <AssemblyName>MCERemote.Controller</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Connection.cs" />
+    <Compile Include="ImageLoader.cs" />
+    <Compile Include="Layout\ControlBar.xaml.cs">
+      <DependentUpon>ControlBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Layout\TitleBar.xaml.cs">
+      <DependentUpon>TitleBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ConnectingPage.xaml.cs">
+      <DependentUpon>ConnectingPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NowPlaying.xaml.cs">
+      <DependentUpon>NowPlaying.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Layout\ControlBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Layout\TitleBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ControlBar\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TitleBar\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ConnectingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\NowPlaying.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Background\Common.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ControlBar\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ControlBar\Buttons\Blank.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Blank.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Blank.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Down.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Down.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Down.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FastForward.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FastForward.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FastForward.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FastReverse.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FastReverse.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FastReverse.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Fullscreen.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Fullscreen.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Fullscreen.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Mute.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Mute.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Mute.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Next.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Next.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Next.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Previous.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Previous.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Previous.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Record.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Record.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Record.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\SeekThumb.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\SeekThumb.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\SeekThumb.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Stop.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Stop.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Stop.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Up.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Up.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Up.Pressed.png" />
+    <Resource Include="Resources\TitleBar\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ControlBar\Buttons\Pause.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Pause.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Pause.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Play.Disabled.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Play.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Play.Pressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PCRemote.Core\MCERemote.Core.csproj">
+      <Project>{33670455-f7b5-4425-975a-4b16e9b3843a}</Project>
+      <Name>MCERemote.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\TitleBar\Buttons\Back.Disabled.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Back.Normal.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Back.Pressed.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Blank.Disabled.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Blank.Normal.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Blank.Pressed.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Close.Disabled.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Close.Normal.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Close.Pressed.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Help.Disabled.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Help.Normal.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Help.Pressed.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Minimize.Disabled.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Minimize.Normal.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Minimize.Pressed.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Settings.Disabled.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Settings.Normal.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Settings.Pressed.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Start.Disabled.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Start.Normal.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Start.Pressed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ControlBar\Mini.Background.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

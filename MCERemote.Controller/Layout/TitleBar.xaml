@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="MCERemote.Controller.Layout.TitleBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MCERemote.Controller.Layout"
+             mc:Ignorable="d" 
+             Height="54"
+             d:DesignHeight="54" d:DesignWidth="800"
+             SnapsToDevicePixels="True">
+    <UserControl.Resources>
+        <ResourceDictionary Source="../Resources/TitleBar/Styles.xaml"/>
+    </UserControl.Resources>
+    
+    <Border>
+        <Border.Background>
+            <ImageBrush ImageSource="../Resources/TitleBar/Background.png"/>
+        </Border.Background>
+
+        <Grid Margin="0 0 0 14">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="92"/>
+                <ColumnDefinition Width="66"/>
+                <ColumnDefinition Width="59"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="24"/>
+                <ColumnDefinition Width="32"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Style="{StaticResource TitleBar.Button.Start}" Click="Button_Clicked" Tag="ClientStart" />
+            <Button Grid.Column="1" Style="{StaticResource TitleBar.Button.Back}" Click="Button_Clicked" Tag="ClientBack" />
+            <Button Grid.Column="2" Style="{StaticResource TitleBar.Button.Settings}" Click="Button_Clicked" Tag="ClientSettings" />
+
+            <Button Grid.Column="4" Style="{StaticResource TitleBar.Button.Minimize}" Click="Button_Clicked" Tag="ClientMinimize" />
+            <Button Grid.Column="5" Style="{StaticResource TitleBar.Button.Close}" Click="Button_Clicked" Tag="ClientClose" />
+        </Grid>
+    </Border>
+</UserControl>

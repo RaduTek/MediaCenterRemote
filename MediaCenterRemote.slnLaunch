@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "Controller + Receiver",
+    "Projects": [
+      {
+        "Path": "MCERemote.Controller\\MCERemote.Controller.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "MCERemote.Receiver\\MCERemote.Receiver.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="MCERemote.Controller.Layout.ControlBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MCERemote.Controller.Layout"
+             mc:Ignorable="d" 
+             Height="55"
+             Width="533"
+             HorizontalAlignment="Left"
+             VerticalAlignment="Bottom">
+    <UserControl.Resources>
+        <ResourceDictionary Source="../Resources/ControlBar/Styles.xaml"/>
+    </UserControl.Resources>
+    
+    <Border>
+        <Border.Background>
+            <ImageBrush ImageSource="../Resources/ControlBar/Mini.Background.png"/>
+        </Border.Background>
+
+        <Grid Margin="0 2 0 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="47"/>
+                <ColumnDefinition Width="70"/>
+                <ColumnDefinition Width="59"/>
+                <ColumnDefinition Width="41"/>
+                <ColumnDefinition Width="45"/>
+                <ColumnDefinition Width="47"/>
+                <ColumnDefinition Width="43"/>
+                <ColumnDefinition Width="46"/>
+                <ColumnDefinition Width="47"/>
+                <ColumnDefinition Width="71"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="channelDown" Grid.Column="0" Style="{StaticResource ControlBar.Button.Down}" 
+                        Click="Button_Clicked" Tag="ChannelDown" />
+            <Button x:Name="channelUp" Grid.Column="1" Style="{StaticResource ControlBar.Button.Up}" 
+                        Click="Button_Clicked" Tag="ChannelUp" />
+            <CheckBox x:Name="playPause" Grid.Column="2" Style="{StaticResource ControlBar.Button.PlayPause}" 
+                          Click="Button_Clicked" Tag="PlayPause" />
+            <Button x:Name="stop" Grid.Column="3" Style="{StaticResource ControlBar.Button.Stop}" 
+                        Click="Button_Clicked" Tag="Stop" />
+            <CheckBox x:Name="record" Grid.Column="4" Style="{StaticResource ControlBar.Button.Record}" 
+                          Click="Button_Clicked" Tag="Record" />
+            <Button x:Name="previous" Grid.Column="5" Style="{StaticResource ControlBar.Button.Previous}" 
+                        Click="Button_Clicked" Tag="Previous" />
+            <Button x:Name="next" Grid.Column="6" Style="{StaticResource ControlBar.Button.Next}"
+                        Click="Button_Clicked" Tag="Next" />
+            <CheckBox x:Name="mute" Grid.Column="7" Style="{StaticResource ControlBar.Button.Mute}" 
+                          Click="Button_Clicked" Tag="ToggleMute" />
+            <Button x:Name="volumeDown" Grid.Column="8" Style="{StaticResource ControlBar.Button.Down}" 
+                        Click="Button_Clicked" Tag="VolumeDown" />
+            <Button x:Name="volumeUp" Grid.Column="9" Style="{StaticResource ControlBar.Button.Up}" 
+                        Click="Button_Clicked" Tag="VolumeUp" />
+        </Grid>
+    </Border>
+</UserControl>

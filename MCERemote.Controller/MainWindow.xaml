@@ -1,0 +1,27 @@
+﻿<Window xmlns:Layout="clr-namespace:MCERemote.Controller.Layout"  x:Class="MCERemote.Controller.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MCERemote.Controller"
+        mc:Ignorable="d"
+        Title="Media Remote Controller" 
+        Height="480" Width="800"
+        FontFamily="Segoe Media Center"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Black"
+        Foreground="White" Loaded="Window_Loaded"
+        >
+    <Grid>
+        <Border>
+            <Border.Background>
+                <ImageBrush ImageSource="/Resources/Background/Common.png" Stretch="UniformToFill"/>
+            </Border.Background>
+        </Border>
+
+        <Frame Margin="0 32 0 0" x:Name="viewFrame" NavigationUIVisibility="Hidden" />
+        <Layout:ControlBar x:Name="controlBar" />
+        <Layout:TitleBar x:Name="titleBar" VerticalAlignment="Top" />
+    </Grid>
+</Window>
