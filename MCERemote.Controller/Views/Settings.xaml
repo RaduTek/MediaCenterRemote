@@ -1,0 +1,30 @@
+﻿<local:PageView x:Class="MCERemote.Controller.Views.Settings"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MCERemote.Controller.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Settings" Loaded="PageView_Loaded">
+
+    <Grid>
+        <TextBlock Text="settings" Style="{StaticResource Page.Background.Title}" />
+
+        <ItemsControl Style="{StaticResource Page.Layout.Primary}">
+            <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource Page.Layout.Title.Secondary}" Text="SETTINGS" />
+            <TextBlock Grid.Row="1" Grid.Column="3" Style="{StaticResource Page.Layout.Title.Primary}" Text="General Settings" />
+
+            <StackPanel Grid.Row="3" Grid.Column="1">
+                <Button x:Name="SaveButton" Style="{StaticResource Page.Button}" Click="SaveButton_Click">Save</Button>
+                <Button x:Name="CancelButton" Style="{StaticResource Page.Button}" Click="CancelButton_Click">Cancel</Button>
+            </StackPanel>
+
+            <StackPanel Grid.Row="3" Grid.Column="3">
+                <CheckBox Style="{StaticResource Page.Checkbox}" IsEnabled="False">Auto Connect</CheckBox>
+                <TextBlock Style="{StaticResource Page.Text.Secondary}" Text="Receiver host name or IP address" />
+                <TextBox x:Name="ReceiverHostTextBox" />
+            </StackPanel>
+        </ItemsControl>
+    </Grid>
+</local:PageView>

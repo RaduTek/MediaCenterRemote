@@ -1,4 +1,4 @@
-﻿<Page x:Class="MCERemote.Controller.Views.NowPlaying"
+﻿<local:PageView x:Class="MCERemote.Controller.Views.NowPlaying"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,52 +6,48 @@
       xmlns:local="clr-namespace:MCERemote.Controller.Views"
       mc:Ignorable="d" 
       d:DesignHeight="448" d:DesignWidth="800"
-      Title="Now Playing"
-      FontFamily="Segoe Media Center">
+      Title="Now Playing" Loaded="PageView_Loaded">
+    <Page.Resources>
+    </Page.Resources>
 
     <Grid>
-        <TextBlock x:Name="nowPlayingText" Text="now playing" FontSize="80" Foreground="#1FFF" 
-                   Margin="-4 -10 0 0" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <TextBlock x:Name="nowPlayingText" Text="music" Style="{StaticResource Page.Background.Title}" />
 
-        <TextBlock x:Name="trackIndex" Text="01" FontSize="200" FontWeight="SemiBold" Foreground="#2000" 
-                   Margin="0 0 0 30" TextAlignment="Center" Width="275"
-                   HorizontalAlignment="Right" VerticalAlignment="Bottom" />
-        
-        <TextBlock x:Name="timeElapsed" Text="00:00" FontSize="90" FontWeight="DemiBold" Foreground="#1FFF" 
-                   Margin="0 0 0 -30" TextAlignment="Center" Width="275"
-                   HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+        <TextBlock x:Name="trackIndex" Text="11" Style="{StaticResource Page.Background.TrackIndex}" />
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 0 55 15">
-            <TextBlock x:Name="trackTimeText" Text="TRACK TIME" FontSize="18" FontWeight="SemiBold" Foreground="#8FFF" Margin="5 0" />
-            <TextBlock x:Name="timeTotal" Text="01:23" FontSize="18" FontWeight="SemiBold" Foreground="#FFF" Margin="5 0" />
+        <TextBlock x:Name="timeElapsed" Text="00:00" Style="{StaticResource Page.Background.TimeElapsed}"  />
+
+        <StackPanel Style="{StaticResource Page.NowPlaying.TrackTotalTime}">
+            <TextBlock x:Name="trackTimeText" Style="{StaticResource Page.Text.Tertiary.Light}" Margin="5 0" Text="TRACK TIME" />
+            <TextBlock x:Name="timeTotal" Style="{StaticResource Page.Text.Tertiary}" Margin="5 0" Text="01:23" />
         </StackPanel>
-        
 
-        <Grid Margin="50 0 0 0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="80"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="160"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="420"/>
-            </Grid.ColumnDefinitions>
 
-            <TextBlock x:Name="albumArtist" Grid.Row="0" Grid.Column="2" FontSize="20" Foreground="#FFF" VerticalAlignment="Center"
-                   FontWeight="SemiBold" Text="ALBUM TITLE: Album Artist" />
+        <ItemsControl Style="{StaticResource Page.Layout.Primary}" Margin="50 0 0 0">
+            <TextBlock x:Name="artist" Style="{StaticResource Page.Layout.Title.Secondary}" Text="NOW PLAYING" />
+            
+            <TextBlock x:Name="albumArtist" Style="{StaticResource Page.Layout.Title.Primary}" Text="ALBUM TITLE: Album Artist" />
 
-            <StackPanel Grid.Row="1" Grid.Column="2">
+            <StackPanel Grid.Row="3" Grid.Column="1">
+                <RadioButton Style="{StaticResource Page.Button.Radio}">View Cover</RadioButton>
+                <RadioButton Style="{StaticResource Page.Button.Radio}">View Queue</RadioButton>
+                <CheckBox Style="{StaticResource Page.Button.CheckBox}">Shuffle</CheckBox>
+                <CheckBox Style="{StaticResource Page.Button.CheckBox}">Repeat</CheckBox>
+                <Button Style="{StaticResource Page.Button}">Visualize</Button>
+                <Button Style="{StaticResource Page.Button}">Edit Queue</Button>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="3" Grid.Column="3">
                 <Border Background="Black"  HorizontalAlignment="Left" Margin="0 0 7 7">
                     <Border.Effect>
                         <DropShadowEffect Color="#000" Direction="320" ShadowDepth="12" BlurRadius="20" Opacity="0.5"/>
                     </Border.Effect>
-                    <Image x:Name="albumArt" Width="220" Height="220" />
+                    <Image x:Name="albumArt" Width="200" Height="200" />
                 </Border>
-                
-                <TextBlock x:Name="trackTitle" Foreground="#FFF" FontSize="20" Text="Track Title" />
-                <TextBlock x:Name="year" Foreground="#FFF" FontSize="20" Text="Year" />
+
+                <TextBlock x:Name="trackTitle" Style="{StaticResource Page.Text.Primary}" Text="Track Title" />
+                <TextBlock x:Name="year" Style="{StaticResource Page.Text.Primary}" Text="Year" />
             </StackPanel>
-        </Grid>
+        </ItemsControl>
     </Grid>
-</Page>
+</local:PageView>

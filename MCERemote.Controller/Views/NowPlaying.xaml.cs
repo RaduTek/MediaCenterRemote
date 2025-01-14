@@ -9,50 +9,41 @@ namespace MCERemote.Controller.Views
     /// <summary>
     /// Interaction logic for NowPlaying.xaml
     /// </summary>
-    public partial class NowPlaying : Page
+    public partial class NowPlaying : PageView
     {
         public NowPlaying()
         {
             InitializeComponent();
         }
 
-        public Connection Connection { get; set; }
-
-
-        private PlayerStatus _PlayerStatus = PlayerStatus.Unknown;
-        public PlayerStatus PlayerStatus
+        private string FormatTime(TimeSpan time)
         {
-            get { return _PlayerStatus; }
-            set
-            {
-                _PlayerStatus = value;
-                UpdateStatus();
-            }
+            return $"{Math.Floor(time.TotalMinutes):00}:{time.Seconds:00}";
         }
 
-        private void UpdateStatus()
+        private void Connection_StatusUpdated(object sender, EventArgs e)
         {
-            if (PlayerStatus.State == PlayerState.Unknown)
+            if (Connection.PlayerStatus.State == PlayerState.Unknown)
             {
                 return;
             }
 
-            albumArtist.Text = PlayerStatus.Album.ToUpper() + ": " + PlayerStatus.Artist;
-            trackTitle.Text = PlayerStatus.Title;
+            albumArtist.Text = Connection.PlayerStatus.Album.ToUpper() + ": " + Connection.PlayerStatus.Artist;
+            trackTitle.Text = Connection.PlayerStatus.Title;
             year.Text = "";
-            timeElapsed.Text = FormatTime(PlayerStatus.Position);
-            timeTotal.Text = FormatTime(PlayerStatus.Duration);
+            timeElapsed.Text = FormatTime(Connection.PlayerStatus.Position);
+            timeTotal.Text = FormatTime(Connection.PlayerStatus.Duration);
 
-            var art = Connection.Controller?.GetThumbnail();
-            if (art != null)
-            {
-                albumArt.Source = ImageLoader.ConvertToBitmapImage(art);
-            }
+            //var art = Connection.Controller?.GetThumbnail();
+            //if (art != null)
+            //{
+            //    albumArt.Source = ImageLoader.ConvertToBitmapImage(art);
+            //}
         }
 
-        private string FormatTime(TimeSpan time)
+        private void PageView_Loaded(object sender, RoutedEventArgs e)
         {
-            return $"{Math.Floor(time.TotalMinutes):00}:{time.Seconds:00}";
+            Connection.PlayerStatusUpdated += Connection_StatusUpdated;
         }
     }
 }
