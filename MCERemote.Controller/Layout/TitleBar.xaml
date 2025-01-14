@@ -27,12 +27,12 @@
                 <ColumnDefinition Width="32"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Style="{StaticResource TitleBar.Button.Start}" Click="Button_Clicked" Tag="ClientStart" />
-            <Button Grid.Column="1" Style="{StaticResource TitleBar.Button.Back}" Click="Button_Clicked" Tag="ClientBack" />
-            <Button Grid.Column="2" Style="{StaticResource TitleBar.Button.Settings}" Click="Button_Clicked" Tag="ClientSettings" />
+            <Button Grid.Column="0" Style="{StaticResource TitleBar.Button.Start}" Click="Button_Clicked" Tag="Start" />
+            <Button Grid.Column="1" Style="{StaticResource TitleBar.Button.Back}" Click="Button_Clicked" Tag="Back" />
+            <Button Grid.Column="2" Style="{StaticResource TitleBar.Button.Settings}" Click="Button_Clicked" Tag="Settings" />
 
-            <Button Grid.Column="4" Style="{StaticResource TitleBar.Button.Minimize}" Click="Button_Clicked" Tag="ClientMinimize" />
-            <Button Grid.Column="5" Style="{StaticResource TitleBar.Button.Close}" Click="Button_Clicked" Tag="ClientClose" />
+            <Button Grid.Column="4" Style="{StaticResource TitleBar.Button.Minimize}" Click="Button_Clicked" Tag="Minimize" />
+            <Button Grid.Column="5" Style="{StaticResource TitleBar.Button.Close}" Click="Button_Clicked" Tag="Close" />
         </Grid>
     </Border>
 </UserControl>

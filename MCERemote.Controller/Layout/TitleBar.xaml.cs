@@ -15,19 +15,19 @@ namespace MCERemote.Controller.Layout
             InitializeComponent();
         }
 
-        public event EventHandler<PlayerActionEventArgs> PlayerActionOccurred;
+        public event EventHandler<TitleBarActionEventArgs> TitleBarActionOccurred;
 
         private void Button_Clicked(object sender, RoutedEventArgs e)
         {
             if (sender is Control control)
             {
                 string tag = control.Tag as string;
-                PlayerAction action = PlayerActionConverter.Parse(tag);
+                TitleBarAction action = TitleBarActionConverter.Parse(tag);
 
-                if (action != PlayerAction.None)
+                if (action != TitleBarAction.None)
                 {
-                    PlayerActionEventArgs args = new PlayerActionEventArgs(action);
-                    PlayerActionOccurred?.Invoke(this, args);
+                    TitleBarActionEventArgs args = new TitleBarActionEventArgs(action);
+                    TitleBarActionOccurred?.Invoke(this, args);
                 }
             }
         }

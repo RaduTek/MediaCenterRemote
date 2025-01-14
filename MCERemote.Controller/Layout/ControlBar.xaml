@@ -8,7 +8,7 @@
              Height="55"
              Width="533"
              HorizontalAlignment="Left"
-             VerticalAlignment="Bottom">
+             VerticalAlignment="Bottom" Loaded="UserControl_Loaded">
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/ControlBar/Styles.xaml"/>
     </UserControl.Resources>

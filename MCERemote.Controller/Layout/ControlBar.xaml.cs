@@ -15,20 +15,17 @@ namespace MCERemote.Controller.Layout
             InitializeComponent();
         }
 
-        public event EventHandler<PlayerActionEventArgs> PlayerActionOccurred;
+        public Connection Connection { get; set; }
 
-        private PlayerStatus _PlayerStatus = PlayerStatus.Unknown;
-        public PlayerStatus PlayerStatus
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            get { return _PlayerStatus; }
-            set {
-                _PlayerStatus = value;
-                UpdateStatus();
-            }
+            if (Connection != null)
+                Connection.PlayerStatusUpdated += Connection_PlayerStatusUpdated;
         }
-        private void UpdateStatus()
+
+        private void Connection_PlayerStatusUpdated(object sender, PlayerStatusUpdatedEventArgs e)
         {
-            if (PlayerStatus.State == PlayerState.Unknown)
+            if (e.PlayerStatus.State == PlayerState.Unknown)
             {
                 IsEnabled = false;
                 return;
@@ -36,10 +33,10 @@ namespace MCERemote.Controller.Layout
 
             IsEnabled = true;
 
-            var playing = PlayerStatus.State == PlayerState.Playing;
+            var playing = e.PlayerStatus.State == PlayerState.Playing;
 
             playPause.IsChecked = playing;
-            mute.IsChecked = PlayerStatus.Mute;
+            mute.IsChecked = e.PlayerStatus.Mute;
 
             // To implement for MCE
             record.IsEnabled = false;
@@ -54,12 +51,16 @@ namespace MCERemote.Controller.Layout
                 string tag = control.Tag as string;
                 PlayerAction action = PlayerActionConverter.Parse(tag);
 
-                if (action != PlayerAction.None)
+                if (action != PlayerAction.None && Connection.IsOpened)
                 {
-                    PlayerActionEventArgs args = new PlayerActionEventArgs(action);
-                    PlayerActionOccurred?.Invoke(this, args);
+                    try
+                    {
+                        Connection.Controller.SendPlayerAction(action);
+                    }
+                    catch { }
                 }
             }
         }
+
     }
 }
