@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Controller.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -59,11 +62,16 @@
     <Compile Include="Layout\TitleBar.xaml.cs">
       <DependentUpon>TitleBar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Layout\TitleBarAction.cs" />
+    <Compile Include="Views\PageView.cs" />
     <Compile Include="Views\ConnectingPage.xaml.cs">
       <DependentUpon>ConnectingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NowPlaying.xaml.cs">
       <DependentUpon>NowPlaying.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings.xaml.cs">
+      <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
     <Page Include="Layout\ControlBar.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -89,6 +97,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\Page\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\TitleBar\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -98,6 +114,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\NowPlaying.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -169,6 +189,10 @@
     <Resource Include="Resources\ControlBar\Buttons\Up.Disabled.png" />
     <Resource Include="Resources\ControlBar\Buttons\Up.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Up.Pressed.png" />
+    <Resource Include="Resources\Page\CheckBox\Checked.Disabled.png" />
+    <Resource Include="Resources\Page\CheckBox\Checked.Focus.png" />
+    <Resource Include="Resources\Page\CheckBox\Unchecked.Disabled.png" />
+    <Resource Include="Resources\Page\CheckBox\Unchecked.Focus.png" />
     <Resource Include="Resources\TitleBar\Background.png" />
   </ItemGroup>
   <ItemGroup>
@@ -178,12 +202,6 @@
     <Resource Include="Resources\ControlBar\Buttons\Play.Disabled.png" />
     <Resource Include="Resources\ControlBar\Buttons\Play.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Play.Pressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\PCRemote.Core\MCERemote.Core.csproj">
-      <Project>{33670455-f7b5-4425-975a-4b16e9b3843a}</Project>
-      <Name>MCERemote.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\TitleBar\Buttons\Back.Disabled.png" />
@@ -210,6 +228,51 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ControlBar\Mini.Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MCERemote.Core\MCERemote.Core.csproj">
+      <Project>{33670455-f7b5-4425-975a-4b16e9b3843a}</Project>
+      <Name>MCERemote.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\Button\Background.Disabled.png" />
+    <Resource Include="Resources\Page\Button\Background.Dormant.png" />
+    <Resource Include="Resources\Page\Button\Background.Focus.Highlight.png" />
+    <Resource Include="Resources\Page\Button\Background.Focus.png" />
+    <Resource Include="Resources\Page\Button\Background.NoFocus.png" />
+    <Resource Include="Resources\Page\Button\Checkmark.Focus.png" />
+    <Resource Include="Resources\Page\Button\Checkmark.NoFocus.png" />
+    <Resource Include="Resources\Page\Button\Highlight.Afterglow.png" />
+    <Resource Include="Resources\Page\Button\Highlight.Pressed.png" />
+    <Resource Include="Resources\Page\Button\Radio.Bullet.Dormant.png" />
+    <Resource Include="Resources\Page\Button\Radio.Bullet.Focus.png" />
+    <Resource Include="Resources\Page\Button\Radio.Bullet.NoFocus.png" />
+    <Resource Include="Resources\Page\Button\Radio.Outline.Focus.png" />
+    <Resource Include="Resources\Page\Button\Radio.Outline.NoFocus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\CheckBox\Checked.Dormant.png" />
+    <Resource Include="Resources\Page\CheckBox\Checked.Highlight.png" />
+    <Resource Include="Resources\Page\CheckBox\Checked.NoFocus.png" />
+    <Resource Include="Resources\Page\CheckBox\Unchecked.Dormant.png" />
+    <Resource Include="Resources\Page\CheckBox\Unchecked.Highlight.png" />
+    <Resource Include="Resources\Page\CheckBox\Unchecked.NoFocus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\RadioButton\Checked.Disabled.png" />
+    <Resource Include="Resources\Page\RadioButton\Checked.Dormant.png" />
+    <Resource Include="Resources\Page\RadioButton\Checked.Focus.png" />
+    <Resource Include="Resources\Page\RadioButton\Checked.Highlight.png" />
+    <Resource Include="Resources\Page\RadioButton\Checked.NoFocus.png" />
+    <Resource Include="Resources\Page\RadioButton\Unchecked.Disabled.png" />
+    <Resource Include="Resources\Page\RadioButton\Unchecked.Dormant.png" />
+    <Resource Include="Resources\Page\RadioButton\Unchecked.Focus.png" />
+    <Resource Include="Resources\Page\RadioButton\Unchecked.Highlight.png" />
+    <Resource Include="Resources\Page\RadioButton\Unchecked.NoFocus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Controller.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

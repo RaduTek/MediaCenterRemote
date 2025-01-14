@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="Media Remote Controller" 
         Height="480" Width="800"
-        FontFamily="Segoe Media Center"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="Black"
-        Foreground="White" Loaded="Window_Loaded"
+        Foreground="White" 
+        Loaded="Window_Loaded"
         >
     <Grid>
         <Border>
@@ -20,8 +20,8 @@
             </Border.Background>
         </Border>
 
-        <Frame Margin="0 32 0 0" x:Name="viewFrame" NavigationUIVisibility="Hidden" />
+        <Frame Margin="0 32 0 0" x:Name="viewFrame" NavigationUIVisibility="Hidden" Focusable="False" FocusManager.IsFocusScope="False" KeyboardNavigation.IsTabStop="False" />
         <Layout:ControlBar x:Name="controlBar" />
-        <Layout:TitleBar x:Name="titleBar" VerticalAlignment="Top" />
+        <Layout:TitleBar x:Name="titleBar" VerticalAlignment="Top" TitleBarActionOccurred="titleBar_TitleBarActionOccurred" />
     </Grid>
 </Window>

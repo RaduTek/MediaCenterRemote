@@ -1,7 +1,5 @@
-﻿using MCERemote.Core;
-using System;
+﻿using System;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace MCERemote.Controller
 {
@@ -18,22 +16,9 @@ namespace MCERemote.Controller
             Left = 0;
         }
 
-        DispatcherTimer timer;
-
-        Connection connection;
-        PlayerStatus _PlayerStatus = PlayerStatus.Unknown;
-        PlayerStatus PlayerStatus
-        {
-            get { return _PlayerStatus; }
-            set
-            {
-                _PlayerStatus = value;
-                controlBar.PlayerStatus = value;
-                nowPlaying.PlayerStatus = value;
-            }
-        }
-
         Views.NowPlaying nowPlaying;
+        Views.ConnectingPage connectingPage;
+        Connection connection;
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -42,72 +27,54 @@ namespace MCERemote.Controller
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            nowPlaying = new Views.NowPlaying();
-
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
-
-            titleBar.PlayerActionOccurred += PlayerActionOccurred;
-            controlBar.PlayerActionOccurred += PlayerActionOccurred;
-
             connection = new Connection();
+
             connection.Opened += Connection_Opened;
             connection.Closed += Connection_Closed;
-            connection.Faulted += Connection_Faulted;
 
-            nowPlaying.Connection = connection;
-            Views.ConnectingPage connectingPage = new Views.ConnectingPage
-            {
-                Connection = connection
-            };
-            viewFrame.Content = connectingPage;
-        }
+            controlBar.Connection = connection;
 
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            PlayerStatus = connection.Controller.GetPlayerStatus();
+            connectingPage = new Views.ConnectingPage();
+            OpenPage(connectingPage);
         }
 
         private void Connection_Opened(object sender, EventArgs e)
         {
-            PlayerStatus = connection.Controller.GetPlayerStatus();
-            timer.Start();
-
-            viewFrame.Content = nowPlaying;
+            try
+            {
+                viewFrame.RemoveBackEntry();
+            }
+            catch { }
+            nowPlaying = new Views.NowPlaying();
+            OpenPage(nowPlaying);
         }
 
-        private void Connection_Closed(object sender, EventArgs e)
+        private void Connection_Closed(object sender, ConnectionClosedEventArgs e)
         {
-            PlayerStatus = PlayerStatus.Unknown;
-            timer.Stop();
+            nowPlaying = null;
+            
+            OpenPage(connectingPage);
         }
 
-        private void Connection_Faulted(object sender, EventArgs e)
+        private void OpenPage(Views.PageView page)
         {
-            PlayerStatus = PlayerStatus.Unknown;
-            timer.Stop();
+            page.Connection = connection;
+            viewFrame.Content = page;
         }
 
-        private void PlayerActionOccurred(object sender, PlayerActionEventArgs e)
+        private void titleBar_TitleBarActionOccurred(object sender, Layout.TitleBarActionEventArgs e)
         {
             switch (e.Action)
             {
-                case PlayerAction.ClientMinimize:
+                case Layout.TitleBarAction.Minimize:
                     WindowState = WindowState.Minimized;
                     break;
-                case PlayerAction.ClientClose:
+                case Layout.TitleBarAction.Close:
                     Close();
                     break;
 
-                case PlayerAction.SeekThumb:
-                    if (e.Data is double seconds)
-                        connection.Controller.Seek(seconds);
-                    break;
-
-                default:
-                    if (connection.Connected)
-                        connection.Controller.SendPlayerAction(e.Action);
+                case Layout.TitleBarAction.Settings:
+                    OpenPage(new Views.Settings());
                     break;
             }
         }
