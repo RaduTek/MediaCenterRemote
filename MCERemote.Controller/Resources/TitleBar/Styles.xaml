@@ -12,6 +12,8 @@
         <Setter Property="Height" Value="32" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FocusManager.IsFocusScope" Value="False" />
+        <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
 
         <Setter Property="Template">
             <Setter.Value>
