@@ -1,53 +1,62 @@
-﻿<local:PageView x:Class="MCERemote.Controller.Views.NowPlaying"
+﻿<Controls:PageView xmlns:Controls="clr-namespace:MCERemote.Controller.Controls"  x:Class="MCERemote.Controller.Views.NowPlaying"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:MCERemote.Controller.Views"
       mc:Ignorable="d" 
       d:DesignHeight="448" d:DesignWidth="800"
-      Title="Now Playing" Loaded="PageView_Loaded">
-    <Page.Resources>
-    </Page.Resources>
+      Title="Now Playing" 
+      Loaded="PageView_Loaded">
 
     <Grid>
-        <TextBlock x:Name="nowPlayingText" Text="music" Style="{StaticResource Page.Background.Title}" />
-
-        <TextBlock x:Name="trackIndex" Text="11" Style="{StaticResource Page.Background.TrackIndex}" />
-
-        <TextBlock x:Name="timeElapsed" Text="00:00" Style="{StaticResource Page.Background.TimeElapsed}"  />
-
+        <TextBlock x:Name="BackgroundTitle" Text="music" Style="{StaticResource Page.Background.Title}" />
+        <TextBlock x:Name="TrackIndex" Text="01" Style="{StaticResource Page.Background.TrackIndex}" Visibility="Hidden" />
+        <TextBlock x:Name="TimeElapsed" Text="00:00" Style="{StaticResource Page.Background.TimeElapsed}"  />
         <StackPanel Style="{StaticResource Page.NowPlaying.TrackTotalTime}">
-            <TextBlock x:Name="trackTimeText" Style="{StaticResource Page.Text.Tertiary.Light}" Margin="5 0" Text="TRACK TIME" />
-            <TextBlock x:Name="timeTotal" Style="{StaticResource Page.Text.Tertiary}" Margin="5 0" Text="01:23" />
+            <TextBlock x:Name="TrackTimeText" Style="{StaticResource Page.Text.Tertiary.Light}" Margin="5 0" Text="TRACK TIME" />
+            <TextBlock x:Name="TimeTotal" Style="{StaticResource Page.Text.Tertiary}" Margin="5 0" Text="00:00" />
         </StackPanel>
 
 
-        <ItemsControl Style="{StaticResource Page.Layout.Primary}" Margin="50 0 0 0">
-            <TextBlock x:Name="artist" Style="{StaticResource Page.Layout.Title.Secondary}" Text="NOW PLAYING" />
-            
-            <TextBlock x:Name="albumArtist" Style="{StaticResource Page.Layout.Title.Primary}" Text="ALBUM TITLE: Album Artist" />
-
+        <Controls:LayoutPrimary x:Name="CommonView">
             <StackPanel Grid.Row="3" Grid.Column="1">
-                <RadioButton Style="{StaticResource Page.Button.Radio}">View Cover</RadioButton>
-                <RadioButton Style="{StaticResource Page.Button.Radio}">View Queue</RadioButton>
-                <CheckBox Style="{StaticResource Page.Button.CheckBox}">Shuffle</CheckBox>
-                <CheckBox Style="{StaticResource Page.Button.CheckBox}">Repeat</CheckBox>
-                <Button Style="{StaticResource Page.Button}">Visualize</Button>
-                <Button Style="{StaticResource Page.Button}">Edit Queue</Button>
+                <Controls:ButtonRadio x:Name="ViewCoverButton" IsChecked="True" Click="ViewCoverButton_Click">View Cover</Controls:ButtonRadio>
+                <Controls:ButtonRadio x:Name="ViewQueueButton" Click="ViewQueueButton_Click">View Queue</Controls:ButtonRadio>
+                <Controls:ButtonCheck x:Name="ShuffleButton" Click="ShuffleButton_Click">Shuffle</Controls:ButtonCheck>
+                <Controls:ButtonCheck x:Name="RepeatButton" Click="RepeatButton_Click">Repeat</Controls:ButtonCheck>
+                <Controls:Button x:Name="VisualizeButton" IsEnabled="False" Click="VisualizeButton_Click">Visualize</Controls:Button>
+                <Controls:Button x:Name="EditQueueButton" IsEnabled="False" Click="EditQueueButton_Click">Edit Queue</Controls:Button>
             </StackPanel>
-            
-            <StackPanel Grid.Row="3" Grid.Column="3">
+        </Controls:LayoutPrimary>
+
+        <Controls:LayoutPrimary x:Name="CoverView" Margin="50 0 0 0">
+            <Controls:LayoutTitle x:Name="NowPlayingTitle" Text="NOW PLAYING" Variant="Secondary" />
+            <Controls:LayoutTitle x:Name="AlbumAndArtist" Text="ALBUM TITLE: Album Artist" />
+
+            <StackPanel x:Name="CoverPanel" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2">
                 <Border Background="Black"  HorizontalAlignment="Left" Margin="0 0 7 7">
                     <Border.Effect>
                         <DropShadowEffect Color="#000" Direction="320" ShadowDepth="12" BlurRadius="20" Opacity="0.5"/>
                     </Border.Effect>
-                    <Image x:Name="albumArt" Width="200" Height="200" />
+                    <Image x:Name="AlbumArt" Width="200" Height="200" Source="/Resources/General/Audio.NoCover.png" />
                 </Border>
 
-                <TextBlock x:Name="trackTitle" Style="{StaticResource Page.Text.Primary}" Text="Track Title" />
-                <TextBlock x:Name="year" Style="{StaticResource Page.Text.Primary}" Text="Year" />
+                <TextBlock x:Name="TrackTitle" Style="{StaticResource Page.Text.Primary}" Text="Track Title" />
+                <TextBlock x:Name="Year" Style="{StaticResource Page.Text.Primary}" Text="Year" />
             </StackPanel>
-        </ItemsControl>
+        </Controls:LayoutPrimary>
+
+        <Controls:LayoutPrimary x:Name="QueueView" >
+            <Controls:LayoutTitle x:Name="QueueTitle" Text="QUEUE" Variant="Secondary" />
+            
+            <StackPanel x:Name="QueuePanel" Grid.Row="3" Grid.Column="3">
+                <StackPanel>
+                    <Controls:ButtonWide>Track 1</Controls:ButtonWide>
+                    <Controls:ButtonWide>Track 2</Controls:ButtonWide>
+                    <Controls:ButtonWide>Track 3</Controls:ButtonWide>
+                    <Controls:ButtonWide>Track 4</Controls:ButtonWide>
+                </StackPanel>
+            </StackPanel>
+        </Controls:LayoutPrimary>
     </Grid>
-</local:PageView>
+</Controls:PageView>

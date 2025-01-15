@@ -8,7 +8,7 @@ namespace MCERemote.Controller.Views
     /// <summary>
     /// Interaction logic for ConnectingPage.xaml
     /// </summary>
-    public partial class ConnectingPage : PageView
+    public partial class ConnectingPage : Controls.PageView
     {
         public ConnectingPage()
         {

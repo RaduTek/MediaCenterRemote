@@ -1,24 +1,22 @@
 ﻿using System.IO;
-using System.Drawing;
 using System.Windows.Media.Imaging;
 
 namespace MCERemote.Controller
 {
     internal class ImageLoader
     {
-        public static BitmapImage ConvertToBitmapImage(Image image)
+        public static BitmapImage ByteArrayToBitmapImage(byte[] byteArray)
         {
-            using (MemoryStream memory = new MemoryStream())
+            BitmapImage bitmap = new BitmapImage();
+            using (MemoryStream stream = new MemoryStream(byteArray))
             {
-                image.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
-                memory.Position = 0;
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                return bitmapImage;
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.StreamSource = stream;
+                bitmap.EndInit();
+                bitmap.Freeze(); // Freeze to make it cross-thread accessible
             }
+            return bitmap;
         }
 
     }

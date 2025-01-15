@@ -1,14 +1,15 @@
-﻿<local:PageView x:Class="MCERemote.Controller.Views.ConnectingPage"
+﻿<Controls:PageView x:Class="MCERemote.Controller.Views.ConnectingPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:MCERemote.Controller.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:Controls="clr-namespace:MCERemote.Controller.Controls"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Connecting"
       FontSize="18"
-      Loaded="Page_Loaded">
+      Loaded="Page_Loaded"
+      FocusManager.FocusedElement="{Binding ElementName=retryButton}">
 
     <Grid>
         <TextBlock Text="connection" Style="{StaticResource Page.Background.Title}" />
@@ -20,4 +21,4 @@
                     Content="Reconnect" Click="retryButton_Click" />
         </StackPanel>
     </Grid>
-</local:PageView>
+</Controls:PageView>

@@ -1,5 +1,6 @@
 ﻿using MCERemote.Core;
 using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,10 +18,28 @@ namespace MCERemote.Controller.Layout
 
         public Connection Connection { get; set; }
 
+        public event EventHandler ButtonPressed;
+
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (Connection != null)
+            {
+                Connection.Opened += Connection_Opened;
+                Connection.Closed += Connection_Closed;
                 Connection.PlayerStatusUpdated += Connection_PlayerStatusUpdated;
+            }
+
+            IsEnabled = false;
+        }
+
+        private void Connection_Opened(object sender, EventArgs e)
+        {
+            IsEnabled = true;
+        }
+
+        private void Connection_Closed(object sender, ConnectionClosedEventArgs e)
+        {
+            IsEnabled = false;
         }
 
         private void Connection_PlayerStatusUpdated(object sender, PlayerStatusUpdatedEventArgs e)
@@ -55,7 +74,21 @@ namespace MCERemote.Controller.Layout
                 {
                     try
                     {
-                        Connection.Controller.SendPlayerAction(action);
+                        ThreadPool.QueueUserWorkItem(_ =>
+                        {
+                            Connection.Controller.SendPlayerAction(action);
+
+                            if (action == PlayerAction.Next || action == PlayerAction.Previous)
+                            {
+                                Thread.Sleep(30);
+                                Connection.RefreshNow();
+                            }
+
+                            App.Current.Dispatcher.Invoke((Action)(() =>
+                            {
+                                ButtonPressed?.Invoke(this, EventArgs.Empty);
+                            }));
+                        });
                     }
                     catch { }
                 }

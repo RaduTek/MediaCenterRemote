@@ -39,7 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -55,6 +55,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Connection.cs" />
+    <Compile Include="Controls\ButtonRadio.cs" />
+    <Compile Include="Controls\ButtonCheck.cs" />
+    <Compile Include="Controls\Button.cs" />
+    <Compile Include="Controls\Dialog.cs" />
+    <Compile Include="Controls\LayoutPrimary.cs" />
+    <Compile Include="Controls\LayoutTitle.cs" />
+    <Compile Include="Controls\TextBox.cs" />
+    <Compile Include="Controls\ViewFrame.cs" />
     <Compile Include="ImageLoader.cs" />
     <Compile Include="Layout\ControlBar.xaml.cs">
       <DependentUpon>ControlBar.xaml</DependentUpon>
@@ -63,7 +71,7 @@
       <DependentUpon>TitleBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Layout\TitleBarAction.cs" />
-    <Compile Include="Views\PageView.cs" />
+    <Compile Include="Controls\PageView.cs" />
     <Compile Include="Views\ConnectingPage.xaml.cs">
       <DependentUpon>ConnectingPage.xaml</DependentUpon>
     </Compile>
@@ -94,6 +102,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\ControlBar\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Dialog\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -238,7 +250,7 @@
   <ItemGroup>
     <Resource Include="Resources\Page\Button\Background.Disabled.png" />
     <Resource Include="Resources\Page\Button\Background.Dormant.png" />
-    <Resource Include="Resources\Page\Button\Background.Focus.Highlight.png" />
+    <Resource Include="Resources\Page\Button\Background.Highlight.png" />
     <Resource Include="Resources\Page\Button\Background.Focus.png" />
     <Resource Include="Resources\Page\Button\Background.NoFocus.png" />
     <Resource Include="Resources\Page\Button\Checkmark.Focus.png" />
@@ -274,5 +286,25 @@
   <ItemGroup>
     <Resource Include="Controller.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\Button\Background.Wide.Focus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\Button\Background.Wide.Highlight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\TextBox\Background.Focus.png" />
+    <Resource Include="Resources\Page\TextBox\Background.NoFocus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Dialog\Background.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\General\Audio.NoCover.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Dialog\Divider.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

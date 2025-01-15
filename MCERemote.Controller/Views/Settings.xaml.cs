@@ -17,7 +17,7 @@ namespace MCERemote.Controller.Views
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
-    public partial class Settings : PageView
+    public partial class Settings : Controls.PageView
     {
         public Settings()
         {
@@ -34,12 +34,23 @@ namespace MCERemote.Controller.Views
             Properties.Settings.Default.ReceiverHost = ReceiverHostTextBox.Text;
             Properties.Settings.Default.Save();
 
-            Connection.Close();
+            Connection.IsFirstConnection = true;
+            Connection.Opened += Connection_Opened;
+
+            Connection.Close(silent: true);
+            Connection.Open();
+        }
+
+        private void Connection_Opened(object sender, EventArgs e)
+        {
+            Connection.Opened -= Connection_Opened;
+
+            ParentFrame.GoBackNoException();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-
+            ParentFrame.GoBackNoException();
         }
     }
 }

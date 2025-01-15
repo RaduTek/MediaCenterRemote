@@ -7,6 +7,7 @@
              mc:Ignorable="d" 
              Height="54"
              d:DesignHeight="54" d:DesignWidth="800"
+             VerticalAlignment="Top"
              SnapsToDevicePixels="True">
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/TitleBar/Styles.xaml"/>
@@ -27,12 +28,12 @@
                 <ColumnDefinition Width="32"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Style="{StaticResource TitleBar.Button.Start}" Click="Button_Clicked" Tag="Start" />
-            <Button Grid.Column="1" Style="{StaticResource TitleBar.Button.Back}" Click="Button_Clicked" Tag="Back" />
-            <Button Grid.Column="2" Style="{StaticResource TitleBar.Button.Settings}" Click="Button_Clicked" Tag="Settings" />
+            <Button x:Name="StartButton" Grid.Column="0" Style="{StaticResource TitleBar.Button.Start}" Click="Button_Clicked" Tag="Start" />
+            <Button x:Name="BackButton" Grid.Column="1" Style="{StaticResource TitleBar.Button.Back}" Click="Button_Clicked" Tag="Back" />
+            <Button x:Name="SettingsButton" Grid.Column="2" Style="{StaticResource TitleBar.Button.Settings}" Click="Button_Clicked" Tag="Settings" />
 
-            <Button Grid.Column="4" Style="{StaticResource TitleBar.Button.Minimize}" Click="Button_Clicked" Tag="Minimize" />
-            <Button Grid.Column="5" Style="{StaticResource TitleBar.Button.Close}" Click="Button_Clicked" Tag="Close" />
+            <Button x:Name="MinimizeButton" Grid.Column="4" Style="{StaticResource TitleBar.Button.Minimize}" Click="Button_Clicked" Tag="Minimize" />
+            <Button x:Name="CloseButton" Grid.Column="5" Style="{StaticResource TitleBar.Button.Close}" Click="Button_Clicked" Tag="Close" />
         </Grid>
     </Border>
 </UserControl>

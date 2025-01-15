@@ -22,9 +22,12 @@ namespace MCERemote.Controller
     {
         public bool Faulted { get; private set; }
 
-        public ConnectionClosedEventArgs(bool faulted)
+        public bool Silent { get; private set; }
+
+        public ConnectionClosedEventArgs(bool faulted, bool silent)
         {
             Faulted = faulted;
+            Silent = silent;
         }
     }
 
@@ -34,6 +37,16 @@ namespace MCERemote.Controller
         public PlayerStatusUpdatedEventArgs(PlayerStatus playerStatus)
         {
             PlayerStatus = playerStatus;
+        }
+    }
+
+    public class NowPlayingChangedEventArgs : EventArgs
+    {
+        public MediaInfo NowPlaying { get; private set; }
+
+        public NowPlayingChangedEventArgs(MediaInfo nowPlaying)
+        {
+            NowPlaying = nowPlaying;
         }
     }
 
@@ -75,7 +88,7 @@ namespace MCERemote.Controller
 
         public bool IsFaulted { get; private set; } = false;
 
-        public bool IsFirstConnection { get; private set; } = true;
+        public bool IsFirstConnection { get; set; } = true;
 
         public bool IsOpened => channelFactory != null &&
             channelFactory.State == CommunicationState.Opened &&
@@ -83,11 +96,15 @@ namespace MCERemote.Controller
 
         public PlayerStatus PlayerStatus { get; private set; }
 
+        public MediaInfo NowPlaying { get; private set; }
+
         #endregion
 
         #region Events
 
         public EventHandler<PlayerStatusUpdatedEventArgs> PlayerStatusUpdated;
+        public EventHandler<NowPlayingChangedEventArgs> NowPlayingChanged;
+
         public EventHandler<ConnectionFaultedEventArgs> Faulted;
         public EventHandler<ConnectionClosedEventArgs> Closed;
         public EventHandler Opened;
@@ -103,6 +120,7 @@ namespace MCERemote.Controller
             {
                 try
                 {
+                    var wasFirstConnection = IsFirstConnection;
                     IsFaulted = false;
                     IsFirstConnection = false;
 
@@ -111,10 +129,23 @@ namespace MCERemote.Controller
                     App.Current.Dispatcher.Invoke((Action)(() => Opening?.Invoke(this, EventArgs.Empty)));
 
                     var endpointAddress = new EndpointAddress("net.tcp://" + Host + ":55091/");
-                    var binding = new NetTcpBinding(SecurityMode.None);
+                    var binding = new NetTcpBinding(SecurityMode.None)
+                    {
+                        MaxBufferSize = int.MaxValue,
+                        MaxReceivedMessageSize = int.MaxValue,
+                        ReaderQuotas =
+                        {
+                            MaxArrayLength = int.MaxValue,
+                            MaxStringContentLength = int.MaxValue
+                        }
+                    };
                     channelFactory = new ChannelFactory<IControllerService>(binding, endpointAddress);
 
                     Controller = channelFactory.CreateChannel();
+
+                    if (wasFirstConnection)
+                        Thread.Sleep(500);
+
                     Controller?.Announce("Controller is connected");
 
                     App.Current.Dispatcher.Invoke((Action)(() => InitTimer()));
@@ -134,7 +165,7 @@ namespace MCERemote.Controller
             });
         }
 
-        public void Close(bool faulted = false)
+        public void Close(bool faulted = false, bool silent = false)
         {
             try
             {
@@ -152,7 +183,12 @@ namespace MCERemote.Controller
 
             ResetPlayerStatus();
 
-            Closed?.Invoke(this, new ConnectionClosedEventArgs(faulted));
+            Closed?.Invoke(this, new ConnectionClosedEventArgs(faulted, silent));
+        }
+
+        public void RefreshNow()
+        {
+            Timer_Tick(null, null);
         }
 
         #endregion
@@ -171,7 +207,9 @@ namespace MCERemote.Controller
 
         private void ResetPlayerStatus()
         {
+            NowPlaying = new MediaInfo();
             PlayerStatus = PlayerStatus.Unknown;
+
             PlayerStatusUpdated?.Invoke(this, new PlayerStatusUpdatedEventArgs(PlayerStatus));
         }
 
@@ -185,17 +223,35 @@ namespace MCERemote.Controller
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            try
+            if (IsOpened)
             {
-                if (IsOpened)
+                ThreadPool.QueueUserWorkItem(_ =>
                 {
-                    PlayerStatus = Controller.GetPlayerStatus();
-                    PlayerStatusUpdated?.Invoke(this, new PlayerStatusUpdatedEventArgs(PlayerStatus));
-                }
-            }
-            catch (Exception ex)
-            {
-                RaiseFault(ex);
+                    try
+                    {
+                        var status = Controller.GetPlayerStatus();
+
+                        App.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            PlayerStatus = status;
+
+                            if (PlayerStatus.SourceURL != NowPlaying.SourceURL)
+                            {
+                                NowPlaying = Controller.GetNowPlayingMedia();
+                                NowPlayingChanged?.Invoke(this, new NowPlayingChangedEventArgs(NowPlaying));
+                            }
+
+                            PlayerStatusUpdated?.Invoke(this, new PlayerStatusUpdatedEventArgs(PlayerStatus));
+                        }));
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Current.Dispatcher.Invoke((Action)(() =>
+                        {
+                            RaiseFault(ex);
+                        }));
+                    }
+                });
             }
         }
 

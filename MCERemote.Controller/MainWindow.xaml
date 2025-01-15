@@ -1,4 +1,4 @@
-﻿<Window xmlns:Layout="clr-namespace:MCERemote.Controller.Layout"  x:Class="MCERemote.Controller.MainWindow"
+﻿<Window xmlns:Controls="clr-namespace:MCERemote.Controller.Controls"  xmlns:Layout="clr-namespace:MCERemote.Controller.Layout"  x:Class="MCERemote.Controller.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -12,6 +12,7 @@
         Background="Black"
         Foreground="White" 
         Loaded="Window_Loaded"
+        Closing="Window_Closing"
         >
     <Grid>
         <Border>
@@ -20,8 +21,23 @@
             </Border.Background>
         </Border>
 
-        <Frame Margin="0 32 0 0" x:Name="viewFrame" NavigationUIVisibility="Hidden" Focusable="False" FocusManager.IsFocusScope="False" KeyboardNavigation.IsTabStop="False" />
-        <Layout:ControlBar x:Name="controlBar" />
-        <Layout:TitleBar x:Name="titleBar" VerticalAlignment="Top" TitleBarActionOccurred="titleBar_TitleBarActionOccurred" />
+        <Grid Margin="0 32 0 0">
+            <Grid x:Name="ContentGrid">
+                <Controls:ViewFrame x:Name="ViewFrame" 
+                            HistoryChanged="ViewFrame_HistoryChanged" />
+
+                <Layout:ControlBar x:Name="ControlBar" />
+            </Grid>
+
+            <Controls:DialogHost x:Name="DialogHost" 
+                             Opened="DialogHost_Opened" 
+                             Closed="DialogHost_Closed" />
+
+        </Grid>
+
+        <Layout:TitleBar x:Name="TitleBar" 
+                         CanGoToStart="False" 
+                         CanGoBack="False"
+                         TitleBarActionOccurred="TitleBar_TitleBarActionOccurred" />
     </Grid>
 </Window>
