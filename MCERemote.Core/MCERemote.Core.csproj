@@ -34,7 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,10 +42,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IControllerService.cs" />
+    <Compile Include="MediaInfo.cs" />
     <Compile Include="PlayerAction.cs" />
     <Compile Include="PlayerState.cs" />
     <Compile Include="PlayerStatus.cs" />
+    <Compile Include="PlaylistItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteControlActions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

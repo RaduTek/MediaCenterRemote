@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
-using System.Drawing;
 
 namespace MCERemote.Core
 {
@@ -38,6 +38,15 @@ namespace MCERemote.Core
         void Seek(double seconds);
 
         [OperationContract]
-        Image GetThumbnail();
+        MediaInfo GetNowPlayingMedia();
+
+        [OperationContract]
+        byte[] GetNowPlayingAlbumArt(bool highQuality = false);
+
+        [OperationContract]
+        int GetQueuePosition();
+
+        [OperationContract]
+        List<PlaylistItem> GetNowPlayingPlaylist();
     }
 }

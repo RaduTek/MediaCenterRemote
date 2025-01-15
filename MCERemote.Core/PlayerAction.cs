@@ -15,6 +15,10 @@ namespace MCERemote.Core
         Previous,
         FastForward,
         FastReverse,
+        ShuffleOn,
+        ShuffleOff,
+        RepeatOn,
+        RepeatOff,
 
         // Audio
         VolumeUp,
