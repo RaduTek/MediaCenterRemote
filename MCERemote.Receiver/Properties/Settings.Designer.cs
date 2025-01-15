@@ -22,5 +22,17 @@ namespace MCERemote.Receiver.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UseSystemVolume {
+            get {
+                return ((bool)(this["UseSystemVolume"]));
+            }
+            set {
+                this["UseSystemVolume"] = value;
+            }
+        }
     }
 }

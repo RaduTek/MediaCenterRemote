@@ -15,7 +15,7 @@ namespace MCERemote.Receiver
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ReceiverForm());
+            Application.Run(new MainContext());
         }
     }
 }

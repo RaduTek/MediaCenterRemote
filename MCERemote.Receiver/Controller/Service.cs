@@ -1,12 +1,12 @@
 ﻿using MCERemote.Core;
 using System;
-using System.Drawing;
+using System.Collections.Generic;
+using System.IO;
 using System.ServiceModel;
-using System.Threading;
 using WMPLib;
 using WMPUtil;
 
-namespace MCERemote.Receiver
+namespace MCERemote.Receiver.Controller
 {
     #region Event Args
 
@@ -23,9 +23,9 @@ namespace MCERemote.Receiver
     #endregion
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
-    internal class ControllerService : IControllerService
+    internal class Service : IControllerService
     {
-        public ControllerService()
+        public Service()
         {
             player = null;
         }
@@ -76,6 +76,27 @@ namespace MCERemote.Receiver
             return playerError;
         }
 
+        private int TryParseInt(string s, int defaultValue = 0)
+        {
+            if (int.TryParse(s, out int result))
+                return result;
+            return defaultValue;
+        }
+
+        private bool CheckCurrentMedia()
+        {
+            if (InitPlayer())
+                try
+                {
+                    if (player.currentMedia != null)
+                        return true;
+                }
+                catch
+                { }
+
+            return false;
+        }
+
         #endregion
 
         #region Interface Methods
@@ -88,38 +109,42 @@ namespace MCERemote.Receiver
         public PlayerStatus GetPlayerStatus()
         {
             if (!InitPlayer())
+                return PlayerStatus.Unknown;
+
+            try
+            {
+                var status = new PlayerStatus()
+                {
+                    SourceURL = player.currentMedia?.sourceURL,
+                    PlaylistName = player.currentPlaylist?.name,
+                    State = GetPlayerState(),
+                    Volume = player.settings.volume,
+                    Mute = player.settings.mute,
+                    Shuffle = player.settings.getMode("shuffle"),
+                    Repeat = player.settings.getMode("loop"),
+                    Position = TimeSpan.FromSeconds(Math.Floor(player.controls.currentPosition))
+                };
+
+                return status;
+            }
+            catch
             {
                 return PlayerStatus.Unknown;
             }
+        }
 
-            var status = new PlayerStatus
-            {
-                State = GetPlayerState(),
-                Volume = player.settings.volume,
-                Mute = player.settings.mute
-            };
+        public int GetQueuePosition()
+        {
+            if (!InitPlayer())
+                return 0;
 
-            for (int i = 0; i < 10 && GetPlayerState() == PlayerState.Loading; i++)
+            for (int i = 0; i < player.currentPlaylist.count; i++)
             {
-                // Wait for media to be loaded
-                Thread.Sleep(10);
+                if (player.currentMedia.isIdentical[player.currentPlaylist.Item[i]])
+                    return i + 1;
             }
 
-            if (player.currentMedia != null)
-            {
-                try
-                {
-                    status.Title = player.currentMedia.name;
-                    status.Artist = player.currentMedia.getItemInfo("Artist");
-                    status.Album = player.currentMedia.getItemInfo("Album");
-                    status.Duration = TimeSpan.FromSeconds(player.currentMedia.duration);
-                    status.Position = TimeSpan.FromSeconds(Math.Floor(player.controls.currentPosition));
-                }
-                catch
-                { }
-            }
-
-            return status;
+            return 0;
         }
 
         public PlayerState GetPlayerState()
@@ -157,7 +182,7 @@ namespace MCERemote.Receiver
                     default:
                         return PlayerState.Unknown;
                 }
-            } 
+            }
             catch
             {
                 return PlayerState.Unknown;
@@ -225,12 +250,33 @@ namespace MCERemote.Receiver
                     player.controls.fastReverse();
                     break;
 
+                case PlayerAction.ShuffleOn:
+                    player.settings.setMode("shuffle", true);
+                    break;
+                case PlayerAction.ShuffleOff:
+                    player.settings.setMode("shuffle", false);
+                    break;
+
+                case PlayerAction.RepeatOn:
+                    player.settings.setMode("loop", true);
+                    break;
+                case PlayerAction.RepeatOff:
+                    player.settings.setMode("loop", false);
+                    break;
+
+
                 case PlayerAction.VolumeUp:
-                    player.settings.volume = Math.Min(player.settings.volume + volumeStep, 100);
+                    if (Properties.Settings.Default.UseSystemVolume)
+                        Helpers.SystemVolume.VolumeUp();
+                    else
+                        player.settings.volume = Math.Min(player.settings.volume + volumeStep, 100);
                     break;
 
                 case PlayerAction.VolumeDown:
-                    player.settings.volume = Math.Max(0, player.settings.volume - volumeStep);
+                    if (Properties.Settings.Default.UseSystemVolume)
+                        Helpers.SystemVolume.VolumeDown();
+                    else
+                        player.settings.volume = Math.Max(0, player.settings.volume - volumeStep);
                     break;
 
                 case PlayerAction.Mute:
@@ -242,7 +288,10 @@ namespace MCERemote.Receiver
                     break;
 
                 case PlayerAction.ToggleMute:
-                    player.settings.mute = !player.settings.mute;
+                    if (Properties.Settings.Default.UseSystemVolume)
+                        Helpers.SystemVolume.Mute();
+                    else
+                        player.settings.mute = !player.settings.mute;
                     break;
             }
 
@@ -299,11 +348,80 @@ namespace MCERemote.Receiver
             player.controls.currentPosition = seconds;
         }
 
-        public Image GetThumbnail()
+        public MediaInfo GetNowPlayingMedia()
         {
+            if (!CheckCurrentMedia())
+                return new MediaInfo();
+
+            try
+            {
+                var media = new MediaInfo();
+
+                media.SourceURL = player.currentMedia.sourceURL;
+                media.Title = player.currentMedia.name;
+                media.Artist = player.currentMedia.getItemInfo("WM/Artist");
+                media.Genre = player.currentMedia.getItemInfo("WM/Genre");
+                media.Composer = player.currentMedia.getItemInfo("WM/Composer");
+                media.Year = TryParseInt(player.currentMedia.getItemInfo("WM/Year"));
+                media.TrackNumber = TryParseInt(player.currentMedia.getItemInfo("WM/TrackNumber"), 1);
+                media.Album = player.currentMedia.getItemInfo("WM/AlbumTitle");
+                media.AlbumArtist = player.currentMedia.getItemInfo("WM/AlbumArtist");
+                media.Duration = TimeSpan.FromSeconds(player.currentMedia.duration);
+
+                return media;
+            }
+            catch
+            {
+                return new MediaInfo();
+            }
+        }
+
+        public byte[] GetNowPlayingAlbumArt(bool highQuality = false)
+        {
+            if (!CheckCurrentMedia())
+                return null;
+
+            try
+            {
+                var path = player.currentMedia.sourceURL;
+                var path1 = Path.Combine(Path.GetDirectoryName(path), "Folder.jpg");
+                var path2 = Path.Combine(Path.GetDirectoryName(path), "AlbumArtSmall.jpg");
+
+                if (highQuality && File.Exists(path1))
+                    return File.ReadAllBytes(path1);
+
+                if (File.Exists(path2))
+                    return File.ReadAllBytes(path2);
+            }
+            catch
+            { }
+
             return null;
         }
 
+        public List<PlaylistItem> GetNowPlayingPlaylist()
+        {
+            if (!CheckCurrentMedia())
+                return new List<PlaylistItem>();
+
+            var playlist = new List<PlaylistItem>();
+
+            for (int i = 0; i < player.currentPlaylist.count; i++)
+            {
+                var item = player.currentPlaylist.Item[i];
+
+                playlist.Add(new PlaylistItem
+                {
+                    Index = i + 1,
+                    Title = item.name,
+                    Artist = player.currentMedia.getItemInfo("WM/Artist"),
+                    SourceURL = item.sourceURL,
+                    Duration = TimeSpan.FromSeconds(item.duration)
+                });
+            }
+
+            return playlist;
+        }
 
         #endregion
     }

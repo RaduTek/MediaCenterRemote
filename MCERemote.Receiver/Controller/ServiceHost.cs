@@ -2,37 +2,37 @@
 using System;
 using System.ServiceModel;
 
-namespace MCERemote.Receiver
+namespace MCERemote.Receiver.Controller
 {
-    internal class ControllerHostSettings
+    internal class HostSettings
     {
         public int Port { get; set; } = 55091;
     }
 
-    internal class ControllerHost
+    internal class ServiceHost
     {
-        public ControllerHost()
+        public ServiceHost()
         {
-            Service = new ControllerService();
+            Service = new Service();
 
-            Settings = new ControllerHostSettings();
+            Settings = new HostSettings();
         }
 
 
         #region Fields
 
-        private ControllerHostSettings settings;
+        private HostSettings settings;
 
         #endregion
 
 
         #region Properties
 
-        public ServiceHost Host { get; private set; }
+        public System.ServiceModel.ServiceHost Host { get; private set; }
 
-        public ControllerService Service { get; private set; }
+        public Service Service { get; private set; }
 
-        public ControllerHostSettings Settings
+        public HostSettings Settings
         {
             get { return settings; }
             set
@@ -51,12 +51,24 @@ namespace MCERemote.Receiver
 
         private void Initialize()
         {
-            Host?.Close();
+            try { Host?.Close(); }
+            catch { }
 
-            Host = new ServiceHost(Service);
+            var binding = new NetTcpBinding(SecurityMode.None)
+            {
+                MaxBufferSize = int.MaxValue,
+                MaxReceivedMessageSize = int.MaxValue,
+                ReaderQuotas =
+                {
+                    MaxArrayLength = int.MaxValue,
+                    MaxStringContentLength = int.MaxValue
+                }
+            };
+
+            Host = new System.ServiceModel.ServiceHost(Service);
             Host.AddServiceEndpoint(
                 typeof(IControllerService),
-                new NetTcpBinding(SecurityMode.None),
+                binding,
                 $"net.tcp://localhost:{settings.Port}/"
             );
         }
@@ -68,9 +80,7 @@ namespace MCERemote.Receiver
 
         public void Open()
         {
-            if (Host == null)
-                Initialize();
-
+            Initialize();
             Host?.Open();
         }
 
