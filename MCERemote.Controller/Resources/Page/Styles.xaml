@@ -1,10 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:MCERemote.Controller"
+                    xmlns:Controls="clr-namespace:MCERemote.Controller.Controls">
 
     <!--#region Page Text Styles-->
 
     <Style x:Key="Page.Text" TargetType="TextBlock">
-        <Setter Property="Margin" Value="2" />
+        <Setter Property="Margin" Value="1" />
+        <Setter Property="TextWrapping" Value="Wrap" />
     </Style>
 
     <Style x:Key="Page.Text.Primary" TargetType="TextBlock" BasedOn="{StaticResource Page.Text}">
@@ -49,9 +52,7 @@
         <Setter Property="FontSize" Value="225" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#2000" />
-        <Setter Property="Margin" Value="0 0 0 30" />
-        <Setter Property="TextAlignment" Value="Left" />
-        <Setter Property="Width" Value="250" />
+        <Setter Property="Margin" Value="0 0 30 30" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
@@ -60,9 +61,7 @@
         <Setter Property="FontSize" Value="90" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#1FFF" />
-        <Setter Property="Margin" Value="0 0 0 -27" />
-        <Setter Property="TextAlignment" Value="Left" />
-        <Setter Property="Width" Value="250" />
+        <Setter Property="Margin" Value="0 0 30 -27" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
@@ -84,11 +83,11 @@
                             <ColumnDefinition Width="180" />
                             <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="120" />
+                            <ColumnDefinition Width="140" />
                             <ColumnDefinition Width="20" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="30" />
+                            <RowDefinition Height="20" />
                             <RowDefinition Height="60" />
                             <RowDefinition Height="10" />
                             <RowDefinition Height="*" />
@@ -104,7 +103,6 @@
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#FFF" />
-        <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="Grid.Row" Value="1" />
         <Setter Property="Grid.Column" Value="3" />
         <Setter Property="Grid.ColumnSpan" Value="2" />
@@ -134,10 +132,17 @@
     <!--#region Buttons-->
 
     <Style x:Key="Page.Button" TargetType="Button">
+        <Style.Resources>
+            <BitmapImage x:Key="Button.Background.NoFocus" UriSource="Button/Background.NoFocus.png" />
+            <BitmapImage x:Key="Button.Background.Disabled" UriSource="Button/Background.Disabled.png" />
+            <BitmapImage x:Key="Button.Background.Focus" UriSource="Button/Background.Focus.png" />
+            <BitmapImage x:Key="Button.Background.Highlight" UriSource="Button/Background.Highlight.png" />
+        </Style.Resources>
+        
         <Setter Property="Foreground" Value="#FFF" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-        <Setter Property="Margin" Value="2" />
+        <Setter Property="Margin" Value="1" />
         <Setter Property="Padding" Value="12 5 12 7" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
@@ -146,7 +151,7 @@
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="buttonBorder" Height="36">
                         <Border.Background>
-                            <ImageBrush ImageSource="Button/Background.NoFocus.png"/>
+                            <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
                         <Border x:Name="buttonHighlight" Padding="{TemplateBinding Padding}">
                             <ContentPresenter />
@@ -157,7 +162,7 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="buttonBorder" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Disabled.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Disabled}"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="Foreground" Value="#8FFF" />
@@ -166,30 +171,55 @@
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="buttonBorder" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Focus.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Focus}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
-
 
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="buttonHighlight" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Focus.Highlight.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
+
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsFocused" Value="True" />
+                                <Condition Property="Controls:ButtonHelper.IsEnterPressed" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="buttonHighlight" Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
+    <Style x:Key="Page.Button.Wide" TargetType="Button" BasedOn="{StaticResource Page.Button}">
+        <Style.Resources>
+            <BitmapImage x:Key="Button.Background.Focus" UriSource="Button/Background.Wide.Focus.png" />
+            <BitmapImage x:Key="Button.Background.Highlight" UriSource="Button/Background.Wide.Highlight.png" />
+        </Style.Resources>
+    </Style>
+
     <Style x:Key="Page.Button.CheckBox" TargetType="CheckBox">
+        <Style.Resources>
+            <BitmapImage x:Key="Button.Background.NoFocus" UriSource="Button/Background.NoFocus.png" />
+            <BitmapImage x:Key="Button.Background.Disabled" UriSource="Button/Background.Disabled.png" />
+            <BitmapImage x:Key="Button.Background.Focus" UriSource="Button/Background.Focus.png" />
+            <BitmapImage x:Key="Button.Background.Highlight" UriSource="Button/Background.Highlight.png" />
+        </Style.Resources>
+        
         <Setter Property="Foreground" Value="#FFF" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-        <Setter Property="Margin" Value="2" />
+        <Setter Property="Margin" Value="1" />
         <Setter Property="Padding" Value="12 5 10 7" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
@@ -198,7 +228,7 @@
                 <ControlTemplate TargetType="CheckBox">
                     <Border x:Name="buttonBorder" Height="36">
                         <Border.Background>
-                            <ImageBrush ImageSource="Button/Background.NoFocus.png"/>
+                            <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
                         <Border x:Name="buttonHighlight" Padding="{TemplateBinding Padding}">
                             <Grid>
@@ -217,7 +247,7 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="buttonBorder" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Disabled.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Disabled}"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="Foreground" Value="#8FFF" />
@@ -230,7 +260,7 @@
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="buttonBorder" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Focus.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Focus}"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter TargetName="buttonSymbol" Property="Source" Value="Button/Checkmark.Focus.png" />
@@ -239,7 +269,7 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="buttonHighlight" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Focus.Highlight.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -250,10 +280,17 @@
     </Style>
 
     <Style x:Key="Page.Button.Radio" TargetType="RadioButton">
+        <Style.Resources>
+            <BitmapImage x:Key="Button.Background.NoFocus" UriSource="Button/Background.NoFocus.png" />
+            <BitmapImage x:Key="Button.Background.Disabled" UriSource="Button/Background.Disabled.png" />
+            <BitmapImage x:Key="Button.Background.Focus" UriSource="Button/Background.Focus.png" />
+            <BitmapImage x:Key="Button.Background.Highlight" UriSource="Button/Background.Highlight.png" />
+        </Style.Resources>
+        
         <Setter Property="Foreground" Value="#FFF" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-        <Setter Property="Margin" Value="2" />
+        <Setter Property="Margin" Value="1" />
         <Setter Property="Padding" Value="12 5 8 7" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
@@ -262,7 +299,7 @@
                 <ControlTemplate TargetType="RadioButton">
                     <Border x:Name="buttonBorder" Height="36">
                         <Border.Background>
-                            <ImageBrush ImageSource="Button/Background.NoFocus.png"/>
+                            <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
                         <Border x:Name="buttonHighlight" Padding="{TemplateBinding Padding}">
                             <Grid>
@@ -281,7 +318,7 @@
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="buttonBorder" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Disabled.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Disabled}"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="Foreground" Value="#8FFF" />
@@ -294,7 +331,7 @@
                         <Trigger Property="IsFocused" Value="True">
                             <Setter TargetName="buttonBorder" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Focus.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Focus}"/>
                                 </Setter.Value>
                             </Setter>
                             <Setter TargetName="buttonSymbol" Property="Source" Value="Button/Radio.Outline.Focus.png" />
@@ -303,7 +340,7 @@
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="buttonHighlight" Property="Background">
                                 <Setter.Value>
-                                    <ImageBrush ImageSource="Button/Background.Focus.Highlight.png"/>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -329,7 +366,7 @@
         <Setter Property="Foreground" Value="#FFF" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-        <Setter Property="Margin" Value="2" />
+        <Setter Property="Margin" Value="1" />
         <Setter Property="Padding" Value="8 0 0 2" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
@@ -402,7 +439,7 @@
         <Setter Property="Foreground" Value="#FFF" />
         <Setter Property="FontSize" Value="18" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-        <Setter Property="Margin" Value="2" />
+        <Setter Property="Margin" Value="1" />
         <Setter Property="Padding" Value="8 0 0 2" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
@@ -465,6 +502,37 @@
                             <Setter TargetName="checkHighlight" Property="Source" Value="RadioButton/Checked.Highlight.png" />
                             <Setter TargetName="checkHighlight" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!--#endregion-->
+    
+    <!--#region Text Input-->
+
+    <Style x:Key="Page.TextInput" TargetType="TextBox">
+        <Setter Property="Width" Value="180" />
+        <Setter Property="Height" Value="36" />
+        <Setter Property="Padding" Value="10 5 8 7" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}">
+                        <Image x:Name="TextBoxBack" Source="TextBox/Background.NoFocus.png" Stretch="Fill" />
+                        <ScrollViewer x:Name="PART_ContentHost" Padding="{TemplateBinding Padding}" />
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="TextBoxBack" Property="Source" Value="TextBox/Background.Focus.png" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

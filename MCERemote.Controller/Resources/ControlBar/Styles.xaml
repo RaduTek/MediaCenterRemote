@@ -15,6 +15,7 @@
         <Setter Property="Margin" Value="0 1 0 0" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="FocusManager.IsFocusScope" Value="False" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
 
@@ -124,6 +125,7 @@
         <Setter Property="Margin" Value="0 1 0 0" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="FocusManager.IsFocusScope" Value="False" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
 
@@ -199,6 +201,7 @@
         <Setter Property="Height" Value="45" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="FocusManager.IsFocusScope" Value="False" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
 
@@ -296,6 +299,7 @@
         <Setter Property="Height" Value="20" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="FocusManager.IsFocusScope" Value="False" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
 
@@ -405,6 +409,7 @@
     </Style>
 
     <Style x:Key="ControlBar.Slider" TargetType="Slider">
+        <Setter Property="Focusable" Value="False" />
         <Setter Property="FocusManager.IsFocusScope" Value="False" />
         <Setter Property="KeyboardNavigation.IsTabStop" Value="False" />
         
