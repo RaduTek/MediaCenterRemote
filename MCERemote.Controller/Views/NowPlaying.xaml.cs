@@ -166,8 +166,8 @@ namespace MCERemote.Controller.Views
 
             queue = new List<QueueItem>();
             QueueList.ItemsSource = null;
-            QueueStatus.Text = "Loading queue...";
-            QueueStatus.Visibility = Visibility.Visible;
+            QueueStatus.Visibility = Visibility.Collapsed;
+            IsLoading = true;
 
             ThreadPool.QueueUserWorkItem(_ =>
             {
@@ -187,8 +187,12 @@ namespace MCERemote.Controller.Views
 
                 App.Current.Dispatcher.Invoke((Action)(() =>
                 {
+                    // A newer load is in progress and will clear the loading state
                     if (loadId != queueLoadId)
                         return;
+
+                    // Stop loading before focusing an item, as input is blocked while loading
+                    IsLoading = false;
 
                     queue = (playlist ?? new List<PlaylistItem>()).Select(item => new QueueItem(item)).ToList();
                     QueueList.ItemsSource = queue;
@@ -196,10 +200,10 @@ namespace MCERemote.Controller.Views
                     if (queue.Count == 0)
                     {
                         QueueStatus.Text = "The queue is empty";
+                        QueueStatus.Visibility = Visibility.Visible;
                         return;
                     }
 
-                    QueueStatus.Visibility = Visibility.Collapsed;
                     UpdateQueueListHeight();
                     SetCurrentQueueItem(position, true);
                 }));

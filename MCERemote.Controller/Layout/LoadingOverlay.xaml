@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="MCERemote.Controller.Layout.LoadingOverlay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="1024"
+             Focusable="False"
+             Visibility="Collapsed">
+    <UserControl.Resources>
+        <ResourceDictionary Source="../Resources/LoadingOverlay/Styles.xaml"/>
+    </UserControl.Resources>
+
+    <Border Style="{StaticResource LoadingOverlay.Background}">
+        <Grid Style="{StaticResource LoadingOverlay.Spinner}">
+            <Image x:Name="Wheel" Style="{StaticResource LoadingOverlay.Spinner.Image}" Source="/Resources/LoadingOverlay/Spinner.Wheel.png">
+                <Image.RenderTransform>
+                    <RotateTransform />
+                </Image.RenderTransform>
+            </Image>
+            <Image Style="{StaticResource LoadingOverlay.Spinner.Image}" Source="/Resources/LoadingOverlay/Spinner.Frame.png" />
+        </Grid>
+    </Border>
+</UserControl>

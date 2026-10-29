@@ -72,6 +72,9 @@
       <DependentUpon>TitleBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Layout\TitleBarAction.cs" />
+    <Compile Include="Layout\LoadingOverlay.xaml.cs">
+      <DependentUpon>LoadingOverlay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Layout\NowPlayingOverlay.xaml.cs">
       <DependentUpon>NowPlayingOverlay.xaml</DependentUpon>
     </Compile>
@@ -109,6 +112,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Layout\LoadingOverlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Layout\NowPlayingOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +137,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\TitleBar\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\LoadingOverlay\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -292,6 +303,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\General\Audio.NoCover.png" />
+    <Resource Include="Resources\General\Spinner.Frame.png" />
+    <Resource Include="Resources\General\Spinner.Wheel.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Dialog\Divider.png" />
