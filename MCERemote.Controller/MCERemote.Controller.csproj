@@ -303,8 +303,8 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\General\Audio.NoCover.png" />
-    <Resource Include="Resources\General\Spinner.Frame.png" />
-    <Resource Include="Resources\General\Spinner.Wheel.png" />
+    <Resource Include="Resources\LoadingOverlay\Spinner.Frame.png" />
+    <Resource Include="Resources\LoadingOverlay\Spinner.Wheel.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Dialog\Divider.png" />
@@ -391,6 +391,21 @@
     <Resource Include="Resources\Page\ScrollBar\Arrow.Right.png" />
     <Resource Include="Resources\Page\ScrollBar\Arrow.Right.Pressed.png" />
     <Resource Include="Resources\Page\ScrollBar\Arrow.Up.Disabled.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\General\Star.Empty.png" />
+    <Resource Include="Resources\General\Star.Half.png" />
+    <Resource Include="Resources\General\Star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\Tile\Folder.Dormant.png" />
+    <Resource Include="Resources\Page\Tile\Folder.Focus.png" />
+    <Resource Include="Resources\Page\Tile\Folder.Highlight.png" />
+    <Resource Include="Resources\Page\Tile\Folder.NoFocus.png" />
+    <Resource Include="Resources\Page\Tile\Tile.Dormant.png" />
+    <Resource Include="Resources\Page\Tile\Tile.Focus.png" />
+    <Resource Include="Resources\Page\Tile\Tile.Highlight.png" />
+    <Resource Include="Resources\Page\Tile\Tile.NoFocus.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
