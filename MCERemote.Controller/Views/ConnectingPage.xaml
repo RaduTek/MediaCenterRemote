@@ -5,9 +5,9 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:Controls="clr-namespace:MCERemote.Controller.Controls"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="600" d:DesignWidth="1024"
       Title="Connecting"
-      FontSize="18"
+      FontSize="23"
       Loaded="Page_Loaded"
       FocusManager.FocusedElement="{Binding ElementName=retryButton}">
 
@@ -15,7 +15,7 @@
         <TextBlock Text="connection" Style="{StaticResource Page.Background.Title}" />
         
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Label x:Name="statusLabel" Margin="0 6" Foreground="White" Content="Please wait..." />
+            <Label x:Name="statusLabel" Margin="0 8" Foreground="White" Content="Please wait..." />
             <Button x:Name="retryButton" Style="{StaticResource Page.Button}"
                     HorizontalAlignment="Center"
                     Content="Reconnect" Click="retryButton_Click" />

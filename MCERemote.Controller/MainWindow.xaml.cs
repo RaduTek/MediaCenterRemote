@@ -16,6 +16,7 @@ namespace MCERemote.Controller
             Left = 0;
         }
 
+        Views.Start start;
         Views.NowPlaying nowPlaying;
         Connection connection;
         Controls.Dialog connectingDialog;
@@ -32,6 +33,10 @@ namespace MCERemote.Controller
             };
 
             Connection_Init();
+
+            start = new Views.Start();
+            start.ItemInvoked += Start_ItemInvoked;
+            ViewFrame.OpenPage(start, true);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -50,6 +55,10 @@ namespace MCERemote.Controller
                     Close();
                     break;
 
+                case Layout.TitleBarAction.Start:
+                    ViewFrame.OpenPage(start, true);
+                    break;
+
                 case Layout.TitleBarAction.Back:
                     ViewFrame.GoBack();
                     break;
@@ -63,6 +72,26 @@ namespace MCERemote.Controller
         private void ViewFrame_HistoryChanged(object sender, EventArgs e)
         {
             TitleBar.CanGoBack = ViewFrame.CanGoBack;
+            TitleBar.CanGoToStart = ViewFrame.Content != start;
+
+            var page = ViewFrame.Content as Controls.PageView;
+            NowPlayingOverlay.CanShow = page == null || page.ShowNowPlayingOverlay;
+        }
+
+        private void Start_ItemInvoked(object sender, Views.StartItemEventArgs e)
+        {
+            switch (e.Item)
+            {
+                case Views.StartItem.NowPlaying:
+                    if (nowPlaying == null)
+                        nowPlaying = new Views.NowPlaying();
+                    ViewFrame.OpenPage(nowPlaying);
+                    break;
+
+                case Views.StartItem.Settings:
+                    ViewFrame.OpenPage(new Views.Settings());
+                    break;
+            }
         }
 
         private void DialogHost_Opened(object sender, Controls.DialogHostEventArgs e)
@@ -88,6 +117,7 @@ namespace MCERemote.Controller
             connection.Closed += Connection_Closed;
 
             ControlBar.Connection = connection;
+            NowPlayingOverlay.Connection = connection;
             ViewFrame.Connection = connection;
 
             connection.Open();
@@ -101,8 +131,6 @@ namespace MCERemote.Controller
         private void Connection_Opened(object sender, EventArgs e)
         {
             connectingDialog.Close();
-            nowPlaying = new Views.NowPlaying();
-            ViewFrame.OpenPage(nowPlaying, true);
         }
 
         private void Connection_Closed(object sender, ConnectionClosedEventArgs e)

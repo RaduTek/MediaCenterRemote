@@ -25,6 +25,8 @@
             <Controls:ViewFrame x:Name="ViewFrame" 
                                 HistoryChanged="ViewFrame_HistoryChanged" />
 
+            <Layout:NowPlayingOverlay x:Name="NowPlayingOverlay" />
+
             <Layout:ControlBar x:Name="ControlBar" />
         </Grid>
 

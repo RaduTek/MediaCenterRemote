@@ -61,6 +61,7 @@
     <Compile Include="Controls\Dialog.cs" />
     <Compile Include="Controls\LayoutPrimary.cs" />
     <Compile Include="Controls\LayoutTitle.cs" />
+    <Compile Include="Controls\StartTile.cs" />
     <Compile Include="Controls\TextBox.cs" />
     <Compile Include="Controls\ViewFrame.cs" />
     <Compile Include="ImageLoader.cs" />
@@ -71,6 +72,9 @@
       <DependentUpon>TitleBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="Layout\TitleBarAction.cs" />
+    <Compile Include="Layout\NowPlayingOverlay.xaml.cs">
+      <DependentUpon>NowPlayingOverlay.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PageView.cs" />
     <Compile Include="Views\ConnectingPage.xaml.cs">
       <DependentUpon>ConnectingPage.xaml</DependentUpon>
@@ -80,6 +84,9 @@
     </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Start.xaml.cs">
+      <DependentUpon>Start.xaml</DependentUpon>
     </Compile>
     <Page Include="Layout\ControlBar.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -98,6 +105,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Layout\TitleBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Layout\NowPlayingOverlay.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -121,6 +132,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Resources\NowPlayingOverlay\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Views\Start\Styles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ConnectingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +149,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Start.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -311,6 +334,30 @@
     <Resource Include="Resources\TitleBar\Buttons\Start.Disabled.2x.png" />
     <Resource Include="Resources\TitleBar\Buttons\Start.Normal.2x.png" />
     <Resource Include="Resources\TitleBar\Buttons\Start.Pressed.2x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Views\Start\Background.Focus.png" />
+    <Resource Include="Resources\Views\Start\Background.Highlight.png" />
+    <Resource Include="Resources\Views\Start\Background.NoFocus.png" />
+    <Resource Include="Resources\Views\Start\Start.DVD.png" />
+    <Resource Include="Resources\Views\Start\Start.Music.png" />
+    <Resource Include="Resources\Views\Start\Start.Photos.png" />
+    <Resource Include="Resources\Views\Start\Start.Settings.png" />
+    <Resource Include="Resources\Views\Start\Start.TV.png" />
+    <Resource Include="Resources\Views\Start\Start.Video.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Views\Start\Start.Extras.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Views\Start\Start.Portal.PNG" />
+    <Resource Include="Resources\Views\Start\Start.Radio.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Views\Start\Start.Logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Views\Start\Start.Remote.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="MCERemote.Controller.Layout.NowPlayingOverlay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             HorizontalAlignment="Right"
+             VerticalAlignment="Bottom"
+             Margin="0 0 24 24"
+             Focusable="False"
+             IsHitTestVisible="False"
+             Visibility="Collapsed"
+             SnapsToDevicePixels="True">
+    <UserControl.Resources>
+        <ResourceDictionary Source="../Resources/NowPlayingOverlay/Styles.xaml"/>
+    </UserControl.Resources>
+
+    <StackPanel Orientation="Horizontal">
+        <StackPanel Style="{StaticResource NowPlayingOverlay.Text}">
+            <TextBlock x:Name="ArtistText" Style="{StaticResource NowPlayingOverlay.Text.Secondary}" Text="Artist" />
+            <TextBlock x:Name="TitleText" Style="{StaticResource NowPlayingOverlay.Text.Primary}" Text="Track Title" />
+            <TextBlock x:Name="TimeElapsedText" Style="{StaticResource NowPlayingOverlay.Text.Secondary}" Text="0:00" />
+        </StackPanel>
+
+        <Border Style="{StaticResource NowPlayingOverlay.Cover}">
+            <Image x:Name="AlbumArt" Style="{StaticResource NowPlayingOverlay.Cover.Image}" Source="/Resources/General/Audio.NoCover.png" />
+        </Border>
+    </StackPanel>
+</UserControl>

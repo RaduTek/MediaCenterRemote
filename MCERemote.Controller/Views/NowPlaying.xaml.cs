@@ -24,7 +24,7 @@ namespace MCERemote.Controller.Views
             return $"{Math.Floor(time.TotalMinutes):00}:{time.Seconds:00}";
         }
 
-        private Thickness coverMargin = new Thickness(40, 0, 0, 0);
+        private Thickness coverMargin = new Thickness(50, 0, 0, 0);
         private Thickness queueMargin = new Thickness(0, 0, 0, 0);
 
         private bool _ShowQueue;
@@ -59,6 +59,9 @@ namespace MCERemote.Controller.Views
                 return;
             }
 
+            // Loaded fires every time the page is shown, so avoid subscribing twice
+            Connection.PlayerStatusUpdated -= Connection_StatusUpdated;
+            Connection.NowPlayingChanged -= Connection_NowPlayingChanged;
             Connection.PlayerStatusUpdated += Connection_StatusUpdated;
             Connection.NowPlayingChanged += Connection_NowPlayingChanged;
 

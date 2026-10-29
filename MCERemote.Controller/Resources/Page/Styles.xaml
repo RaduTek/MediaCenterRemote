@@ -11,7 +11,7 @@
     </Style>
 
     <Style x:Key="Page.Text.Primary" TargetType="TextBlock" BasedOn="{StaticResource Page.Text}">
-        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontSize" Value="25" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#FFF" />
     </Style>
@@ -21,19 +21,19 @@
     </Style>
 
     <Style x:Key="Page.Text.Secondary" TargetType="TextBlock" BasedOn="{StaticResource Page.Text.Primary}">
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
     </Style>
 
     <Style x:Key="Page.Text.Secondary.Light" TargetType="TextBlock" BasedOn="{StaticResource Page.Text.Primary.Light}">
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
     </Style>
 
     <Style x:Key="Page.Text.Tertiary" TargetType="TextBlock" BasedOn="{StaticResource Page.Text.Primary}">
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="20" />
     </Style>
 
     <Style x:Key="Page.Text.Tertiary.Light" TargetType="TextBlock" BasedOn="{StaticResource Page.Text.Primary.Light}">
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="20" />
     </Style>
 
     <!--#endregion-->
@@ -41,27 +41,27 @@
     <!--#region Page Background-->
 
     <Style x:Key="Page.Background.Title" TargetType="TextBlock" BasedOn="{StaticResource Page.Text}">
-        <Setter Property="FontSize" Value="120" />
+        <Setter Property="FontSize" Value="136" />
         <Setter Property="Foreground" Value="#2FFF" />
-        <Setter Property="Margin" Value="-4 -45 0 0" />
+        <Setter Property="Margin" Value="-5 0 0 0" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
     <Style x:Key="Page.Background.TrackIndex" TargetType="TextBlock" BasedOn="{StaticResource Page.Text}">
-        <Setter Property="FontSize" Value="225" />
+        <Setter Property="FontSize" Value="281" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#2000" />
-        <Setter Property="Margin" Value="0 0 30 30" />
+        <Setter Property="Margin" Value="0 0 38 38" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
 
     <Style x:Key="Page.Background.TimeElapsed" TargetType="TextBlock" BasedOn="{StaticResource Page.Text}">
-        <Setter Property="FontSize" Value="90" />
+        <Setter Property="FontSize" Value="113" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#1FFF" />
-        <Setter Property="Margin" Value="0 0 30 -27" />
+        <Setter Property="Margin" Value="0 0 38 -34" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
@@ -79,19 +79,19 @@
                 <ItemsPanelTemplate>
                     <Grid FocusManager.IsFocusScope="False" KeyboardNavigation.IsTabStop="False">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="30" />
-                            <ColumnDefinition Width="180" />
-                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="38" />
+                            <ColumnDefinition Width="225" />
+                            <ColumnDefinition Width="25" />
                             <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="140" />
-                            <ColumnDefinition Width="20" />
+                            <ColumnDefinition Width="175" />
+                            <ColumnDefinition Width="25" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="20" />
-                            <RowDefinition Height="60" />
-                            <RowDefinition Height="10" />
+                            <RowDefinition Height="65" />
+                            <RowDefinition Height="75" />
+                            <RowDefinition Height="13" />
                             <RowDefinition Height="*" />
-                            <RowDefinition Height="55" />
+                            <RowDefinition Height="70" />
                         </Grid.RowDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
@@ -100,7 +100,7 @@
     </Style>
 
     <Style x:Key="Page.Layout.Title.Primary" TargetType="TextBlock" BasedOn="{StaticResource Page.Text}">
-        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontSize" Value="25" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#FFF" />
         <Setter Property="Grid.Row" Value="1" />
@@ -109,7 +109,7 @@
     </Style>
 
     <Style x:Key="Page.Layout.Title.Secondary" TargetType="TextBlock" BasedOn="{StaticResource Page.Text}">
-        <Setter Property="FontSize" Value="16" />
+        <Setter Property="FontSize" Value="20" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Foreground" Value="#FFF" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -122,7 +122,7 @@
         <Setter Property="Orientation" Value="Horizontal" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
-        <Setter Property="Margin" Value="0 0 50 15" />
+        <Setter Property="Margin" Value="0 0 63 19" />
     </Style>
 
     <!--#endregion-->
@@ -140,16 +140,16 @@
         </Style.Resources>
         
         <Setter Property="Foreground" Value="#FFF" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Margin" Value="1" />
-        <Setter Property="Padding" Value="12 5 12 7" />
+        <Setter Property="Padding" Value="15 6 15 9" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border x:Name="buttonBorder" Height="36">
+                    <Border x:Name="buttonBorder" Height="45">
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
@@ -217,16 +217,16 @@
         </Style.Resources>
         
         <Setter Property="Foreground" Value="#FFF" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Margin" Value="1" />
-        <Setter Property="Padding" Value="12 5 10 7" />
+        <Setter Property="Padding" Value="15 6 13 9" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="CheckBox">
-                    <Border x:Name="buttonBorder" Height="36">
+                    <Border x:Name="buttonBorder" Height="45">
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
@@ -237,7 +237,7 @@
                                     <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Grid.Column="0" />
-                                <Image x:Name="buttonSymbol" Grid.Column="1" Width="18"
+                                <Image x:Name="buttonSymbol" Grid.Column="1" Width="23"
                                        Visibility="Collapsed" Source="Button/Checkmark.Focus.png"  />
                             </Grid>
                         </Border>
@@ -288,16 +288,16 @@
         </Style.Resources>
         
         <Setter Property="Foreground" Value="#FFF" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Margin" Value="1" />
-        <Setter Property="Padding" Value="12 5 8 7" />
+        <Setter Property="Padding" Value="15 6 10 9" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
-                    <Border x:Name="buttonBorder" Height="36">
+                    <Border x:Name="buttonBorder" Height="45">
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
@@ -308,7 +308,7 @@
                                     <ColumnDefinition Width="auto" />
                                 </Grid.ColumnDefinitions>
                                 <ContentPresenter Grid.Column="0" />
-                                <Image x:Name="buttonSymbol" Grid.Column="1" Width="16"
+                                <Image x:Name="buttonSymbol" Grid.Column="1" Width="20"
                                        Source="Button/Radio.Outline.NoFocus.png"  />
                             </Grid>
                         </Border>
@@ -364,10 +364,10 @@
 
     <Style x:Key="Page.Checkbox" TargetType="CheckBox">
         <Setter Property="Foreground" Value="#FFF" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Margin" Value="1" />
-        <Setter Property="Padding" Value="8 0 0 2" />
+        <Setter Property="Padding" Value="10 0 0 3" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
         <Setter Property="Template">
@@ -378,7 +378,7 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Width="36" Height="36">
+                        <Grid Grid.Column="0" Width="45" Height="45">
                             <Image x:Name="checkSymbol" Source="CheckBox/Unchecked.NoFocus.png" />
                             <Image x:Name="checkHighlight" Source="CheckBox/Unchecked.Highlight.png" Visibility="Hidden" />
                         </Grid>
@@ -437,10 +437,10 @@
 
     <Style x:Key="Page.RadioButton" TargetType="RadioButton">
         <Setter Property="Foreground" Value="#FFF" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
         <Setter Property="Margin" Value="1" />
-        <Setter Property="Padding" Value="8 0 0 2" />
+        <Setter Property="Padding" Value="10 0 0 3" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
 
         <Setter Property="Template">
@@ -451,7 +451,7 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Width="36" Height="36">
+                        <Grid Grid.Column="0" Width="45" Height="45">
                             <Image x:Name="checkSymbol" Source="RadioButton/Unchecked.NoFocus.png" />
                             <Image x:Name="checkHighlight" Source="RadioButton/Unchecked.Highlight.png" Visibility="Hidden" />
                         </Grid>
@@ -513,12 +513,12 @@
     <!--#region Text Input-->
 
     <Style x:Key="Page.TextInput" TargetType="TextBox">
-        <Setter Property="Width" Value="180" />
-        <Setter Property="Height" Value="36" />
-        <Setter Property="Padding" Value="10 5 8 7" />
+        <Setter Property="Width" Value="225" />
+        <Setter Property="Height" Value="45" />
+        <Setter Property="Padding" Value="13 6 10 9" />
         <Setter Property="Margin" Value="2" />
         <Setter Property="FontFamily" Value="Segoe UI Semibold" />
-        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontSize" Value="23" />
         <Setter Property="HorizontalAlignment" Value="Left" />
 
         <Setter Property="Template">
