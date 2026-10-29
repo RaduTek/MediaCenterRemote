@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -162,58 +162,22 @@
     <Resource Include="Resources\Background\Common.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\ControlBar\Background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\ControlBar\Buttons\Blank.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Blank.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Blank.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Down.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Down.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Down.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\FastForward.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\FastForward.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\FastForward.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\FastReverse.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\FastReverse.Normal.png" />
-    <Resource Include="Resources\ControlBar\Buttons\FastReverse.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Fullscreen.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Fullscreen.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Fullscreen.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Mute.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Mute.Normal.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Mute.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Next.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Next.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Next.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Previous.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Previous.Normal.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Pause.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Play.Pressed.png" />
     <Resource Include="Resources\ControlBar\Buttons\Previous.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Record.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Record.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Record.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\SeekThumb.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\SeekThumb.Normal.png" />
-    <Resource Include="Resources\ControlBar\Buttons\SeekThumb.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Stop.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Stop.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Stop.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Up.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Up.Normal.png" />
     <Resource Include="Resources\ControlBar\Buttons\Up.Pressed.png" />
     <Resource Include="Resources\Page\CheckBox\Checked.Disabled.png" />
     <Resource Include="Resources\Page\CheckBox\Checked.Focus.png" />
     <Resource Include="Resources\Page\CheckBox\Unchecked.Disabled.png" />
     <Resource Include="Resources\Page\CheckBox\Unchecked.Focus.png" />
     <Resource Include="Resources\TitleBar\Background.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\ControlBar\Buttons\Pause.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Pause.Normal.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Pause.Pressed.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Play.Disabled.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Play.Normal.png" />
-    <Resource Include="Resources\ControlBar\Buttons\Play.Pressed.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\TitleBar\Buttons\Back.Disabled.png" />
@@ -237,9 +201,6 @@
     <Resource Include="Resources\TitleBar\Buttons\Start.Disabled.png" />
     <Resource Include="Resources\TitleBar\Buttons\Start.Normal.png" />
     <Resource Include="Resources\TitleBar\Buttons\Start.Pressed.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\ControlBar\Mini.Background.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MCERemote.Core\MCERemote.Core.csproj">
@@ -305,6 +266,34 @@
   <ItemGroup>
     <Resource Include="Resources\Dialog\Divider.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\ControlBar\Buttons\Blank.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Down.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FastForward.png" />
+    <Resource Include="Resources\ControlBar\Buttons\FullScreen.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Mute.Off.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Mute.Off.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Mute.On.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Mute.On.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Next.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Pause.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Play.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Previous.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Record.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Rewind.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Rewind.Pressed.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Stop.png" />
+    <Resource Include="Resources\ControlBar\Buttons\Up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ControlBar\Background.End.png" />
+    <Resource Include="Resources\ControlBar\Background.Fill.png" />
+    <Resource Include="Resources\ControlBar\Group.1.png" />
+    <Resource Include="Resources\ControlBar\Group.2.Ch.png" />
+    <Resource Include="Resources\ControlBar\Group.2.png" />
+    <Resource Include="Resources\ControlBar\Group.2.Vol.png" />
+    <Resource Include="Resources\ControlBar\Group.2.Wide.png" />
+    <Resource Include="Resources\ControlBar\Group.3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

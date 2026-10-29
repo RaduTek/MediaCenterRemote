@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MCERemote.Controller"
         mc:Ignorable="d"
         Title="Media Remote Controller" 
-        Height="480" Width="800"
+        Height="600" Width="1024"
         WindowStyle="None"
         ResizeMode="NoResize"
         Background="Black"
@@ -24,20 +24,20 @@
         <Grid Margin="0 32 0 0">
             <Grid x:Name="ContentGrid">
                 <Controls:ViewFrame x:Name="ViewFrame" 
-                            HistoryChanged="ViewFrame_HistoryChanged" />
+                                    HistoryChanged="ViewFrame_HistoryChanged" />
 
                 <Layout:ControlBar x:Name="ControlBar" />
             </Grid>
 
             <Controls:DialogHost x:Name="DialogHost" 
-                             Opened="DialogHost_Opened" 
-                             Closed="DialogHost_Closed" />
+                                 Opened="DialogHost_Opened" 
+                                 Closed="DialogHost_Closed" />
 
         </Grid>
 
         <Layout:TitleBar x:Name="TitleBar" 
-                         CanGoToStart="False" 
-                         CanGoBack="False"
-                         TitleBarActionOccurred="TitleBar_TitleBarActionOccurred" />
+                             CanGoToStart="False" 
+                             CanGoBack="False"
+                             TitleBarActionOccurred="TitleBar_TitleBarActionOccurred" />
     </Grid>
 </Window>

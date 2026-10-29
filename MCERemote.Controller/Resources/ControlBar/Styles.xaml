@@ -5,13 +5,12 @@
 
     <Style x:Key="ControlBar.Button" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Blank.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Blank.Pressed.png"/>
         </Style.Resources>
 
-        <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="34" />
+        <Setter Property="Width" Value="45" />
+        <Setter Property="Height" Value="45" />
         <Setter Property="Margin" Value="0 1 0 0" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -37,11 +36,7 @@
                             </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Disabled}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter TargetName="border" Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -53,56 +48,49 @@
 
     <Style x:Key="ControlBar.Button.Down" BasedOn="{StaticResource ControlBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Down.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Down.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Down.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Down.Pressed.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="ControlBar.Button.Fullscreen" BasedOn="{StaticResource ControlBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Fullscreen.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Fullscreen.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Fullscreen.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Fullscreen.Pressed.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="ControlBar.Button.Next" BasedOn="{StaticResource ControlBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Next.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Next.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Next.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Next.Pressed.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="ControlBar.Button.Previous" BasedOn="{StaticResource ControlBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Previous.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Previous.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Previous.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Previous.Pressed.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="ControlBar.Button.SeekThumb" BasedOn="{StaticResource ControlBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/SeekThumb.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/SeekThumb.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/SeekThumb.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/SeekThumb.Pressed.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="ControlBar.Button.Stop" BasedOn="{StaticResource ControlBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Stop.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Stop.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Stop.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Stop.Pressed.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="ControlBar.Button.Up" BasedOn="{StaticResource ControlBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Up.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Up.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Up.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Up.Pressed.png"/>
         </Style.Resources>
     </Style>
@@ -115,15 +103,14 @@
 
     <Style x:Key="ControlBar.Button.Check" TargetType="CheckBox">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Blank.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Blank.Pressed.png"/>
         </Style.Resources>
 
-        <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="34" />
+        <Setter Property="Width" Value="45" />
+        <Setter Property="Height" Value="45" />
         <Setter Property="Margin" Value="0 1 0 0" />
-        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="FocusManager.IsFocusScope" Value="False" />
@@ -154,11 +141,7 @@
                             </Setter>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="border" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Disabled}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Setter TargetName="border" Property="Opacity" Value="0.5"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -168,16 +151,14 @@
 
     <Style x:Key="ControlBar.Button.Mute" BasedOn="{StaticResource ControlBar.Button.Check}" TargetType="CheckBox">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Mute.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Mute.Normal.png"/>
-            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Mute.Pressed.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Mute.Off.png"/>
+            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Mute.On.Pressed.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="ControlBar.Button.Record" BasedOn="{StaticResource ControlBar.Button.Check}" TargetType="CheckBox">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Record.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Record.Normal.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Record.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Record.Pressed.png"/>
         </Style.Resources>
     </Style>
@@ -188,17 +169,15 @@
 
     <Style x:Key="ControlBar.Button.PlayPause" TargetType="CheckBox">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Checked.Disabled" UriSource="Buttons/Pause.Disabled.png"/>
-            <BitmapImage x:Key="Button.Checked.Normal" UriSource="Buttons/Pause.Normal.png"/>
+            <BitmapImage x:Key="Button.Checked.Normal" UriSource="Buttons/Pause.png"/>
             <BitmapImage x:Key="Button.Checked.Pressed" UriSource="Buttons/Pause.Pressed.png"/>
 
-            <BitmapImage x:Key="Button.Unchecked.Disabled" UriSource="Buttons/Play.Disabled.png"/>
-            <BitmapImage x:Key="Button.Unchecked.Normal" UriSource="Buttons/Play.Normal.png"/>
+            <BitmapImage x:Key="Button.Unchecked.Normal" UriSource="Buttons/Play.png"/>
             <BitmapImage x:Key="Button.Unchecked.Pressed" UriSource="Buttons/Play.Pressed.png"/>
         </Style.Resources>
 
-        <Setter Property="Width" Value="45" />
-        <Setter Property="Height" Value="45" />
+        <Setter Property="Width" Value="61" />
+        <Setter Property="Height" Value="61" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Focusable" Value="False" />
@@ -255,29 +234,9 @@
                             </Setter>
                         </MultiTrigger>
 
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="True"/>
-                                <Condition Property="IsEnabled" Value="False"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="border" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Checked.Disabled}"/>
-                                </Setter.Value>
-                            </Setter>
-                        </MultiTrigger>
-
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="False"/>
-                                <Condition Property="IsEnabled" Value="False"/>
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="border" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Unchecked.Disabled}"/>
-                                </Setter.Value>
-                            </Setter>
-                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -288,7 +247,7 @@
 
     <!--#region ControlBar Seek Button-->
 
-    <Style x:Key="ControlBar.Button.Seek" TargetType="CheckBox">
+    <!--<Style x:Key="ControlBar.Button.Seek" TargetType="CheckBox">
         <Style.Resources>
             <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/SeekThumb.Disabled.png"/>
             <BitmapImage x:Key="Button.Normal" UriSource="Buttons/SeekThumb.Normal.png"/>
@@ -354,13 +313,13 @@
             <BitmapImage x:Key="Button.Normal" UriSource="Buttons/FastForward.Normal.png"/>
             <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/FastForward.Pressed.png"/>
         </Style.Resources>
-    </Style>
+    </Style>-->
 
     <!--#endregion-->
 
     <!--#region ControlBar Slider-->
 
-    <Style x:Key="ControlBar.Slider.RepeatButton" TargetType="RepeatButton">
+    <!--<Style x:Key="ControlBar.Slider.RepeatButton" TargetType="RepeatButton">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
@@ -432,7 +391,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
     <!--#endregion-->
 
