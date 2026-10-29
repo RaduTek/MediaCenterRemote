@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Controller\ServiceHost.cs" />
     <Compile Include="Controller\Service.cs" />
+    <Compile Include="Helpers\OleMessageFilter.cs" />
     <Compile Include="Helpers\SystemVolume.cs" />
     <Compile Include="LogView.cs">
       <SubType>Component</SubType>

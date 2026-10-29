@@ -138,11 +138,21 @@ namespace MCERemote.Receiver.Controller
             if (!InitPlayer())
                 return 0;
 
-            for (int i = 0; i < player.currentPlaylist.count; i++)
+            try
             {
-                if (player.currentMedia.isIdentical[player.currentPlaylist.Item[i]])
-                    return i + 1;
+                // Each property access is a cross-process COM call, so fetch these once
+                var playlist = player.currentPlaylist;
+                var current = player.currentMedia;
+                var count = playlist.count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    if (current.isIdentical[playlist.Item[i]])
+                        return i + 1;
+                }
             }
+            catch
+            { }
 
             return 0;
         }
@@ -406,21 +416,47 @@ namespace MCERemote.Receiver.Controller
 
             var playlist = new List<PlaylistItem>();
 
-            for (int i = 0; i < player.currentPlaylist.count; i++)
+            try
             {
-                var item = player.currentPlaylist.Item[i];
+                // Each property access is a cross-process COM call, so fetch the playlist once
+                var currentPlaylist = player.currentPlaylist;
+                var count = currentPlaylist.count;
 
-                playlist.Add(new PlaylistItem
+                for (int i = 0; i < count; i++)
                 {
-                    Index = i + 1,
-                    Title = item.name,
-                    Artist = player.currentMedia.getItemInfo("WM/Artist"),
-                    SourceURL = item.sourceURL,
-                    Duration = TimeSpan.FromSeconds(item.duration)
-                });
+                    var item = currentPlaylist.Item[i];
+
+                    playlist.Add(new PlaylistItem
+                    {
+                        Index = i + 1,
+                        Title = item.name,
+                        Artist = item.getItemInfo("WM/Artist"),
+                        SourceURL = item.sourceURL,
+                        Duration = TimeSpan.FromSeconds(item.duration)
+                    });
+                }
             }
+            catch
+            { }
 
             return playlist;
+        }
+
+        public void PlayQueueItem(int index)
+        {
+            if (!CheckCurrentMedia())
+                return;
+
+            try
+            {
+                var playlist = player.currentPlaylist;
+                if (index < 1 || index > playlist.count)
+                    return;
+
+                player.controls.playItem(playlist.Item[index - 1]);
+            }
+            catch
+            { }
         }
 
         #endregion

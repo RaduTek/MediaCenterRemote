@@ -8,6 +8,31 @@
       Title="Now Playing"
       ShowNowPlayingOverlay="False"
       Loaded="PageView_Loaded">
+    <Controls:PageView.Resources>
+        <DataTemplate x:Key="QueueItemTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Path x:Name="CurrentMarker" Grid.Column="0" Data="M 0 0 L 10 6 L 0 12 Z" Fill="#FFF"
+                      VerticalAlignment="Center" Margin="0 2 10 0" Visibility="Collapsed" />
+                <TextBlock Grid.Column="1" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Grid.Column="2" Text="{Binding Artist}" Foreground="#8FFF" MaxWidth="200"
+                           TextTrimming="CharacterEllipsis" Margin="15 0 0 0" />
+                <TextBlock Grid.Column="3" Text="{Binding DurationText}" Foreground="#8FFF" Margin="15 0 0 0" />
+            </Grid>
+
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding IsCurrent}" Value="True">
+                    <Setter TargetName="CurrentMarker" Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+    </Controls:PageView.Resources>
 
     <Grid>
         <TextBlock x:Name="BackgroundTitle" Text="music" Style="{StaticResource Page.Background.Title}" />
@@ -20,7 +45,7 @@
 
 
         <Controls:LayoutPrimary x:Name="CommonView">
-            <StackPanel Grid.Row="3" Grid.Column="1">
+            <StackPanel Grid.Row="3" Grid.Column="1" PreviewKeyDown="SideButtons_PreviewKeyDown">
                 <Controls:ButtonRadio x:Name="ViewCoverButton" IsChecked="True" Click="ViewCoverButton_Click">View Cover</Controls:ButtonRadio>
                 <Controls:ButtonRadio x:Name="ViewQueueButton" Click="ViewQueueButton_Click">View Queue</Controls:ButtonRadio>
                 <Controls:ButtonCheck x:Name="ShuffleButton" Click="ShuffleButton_Click">Shuffle</Controls:ButtonCheck>
@@ -47,17 +72,26 @@
             </StackPanel>
         </Controls:LayoutPrimary>
 
-        <Controls:LayoutPrimary x:Name="QueueView" >
+        <Controls:LayoutPrimary x:Name="QueueView">
             <Controls:LayoutTitle x:Name="QueueTitle" Text="QUEUE" Variant="Secondary" />
             
-            <StackPanel x:Name="QueuePanel" Grid.Row="3" Grid.Column="3">
-                <StackPanel>
-                    <Controls:ButtonWide>Track 1</Controls:ButtonWide>
-                    <Controls:ButtonWide>Track 2</Controls:ButtonWide>
-                    <Controls:ButtonWide>Track 3</Controls:ButtonWide>
-                    <Controls:ButtonWide>Track 4</Controls:ButtonWide>
-                </StackPanel>
-            </StackPanel>
+            <!-- The list is sized to a whole number of items within this area, see UpdateQueueListHeight -->
+            <Border x:Name="QueueArea" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2" Margin="0 0 0 10"
+                    SizeChanged="QueueArea_SizeChanged">
+                <ListBox x:Name="QueueList" VerticalAlignment="Top"
+                         Style="{StaticResource Page.List}"
+                         ItemContainerStyle="{StaticResource Page.List.Item}"
+                         ItemTemplate="{StaticResource QueueItemTemplate}"
+                         PreviewKeyDown="QueueList_PreviewKeyDown"
+                         PreviewKeyUp="QueueList_PreviewKeyUp"
+                         PreviewMouseLeftButtonDown="QueueList_PreviewMouseLeftButtonDown"
+                         PreviewMouseLeftButtonUp="QueueList_PreviewMouseLeftButtonUp"
+                         MouseLeave="QueueList_MouseLeave" />
+            </Border>
+
+            <TextBlock x:Name="QueueStatus" Grid.Row="3" Grid.Column="3"
+                       Style="{StaticResource Page.Text.Secondary.Light}"
+                       VerticalAlignment="Top" Visibility="Collapsed" />
         </Controls:LayoutPrimary>
     </Grid>
 </Controls:PageView>

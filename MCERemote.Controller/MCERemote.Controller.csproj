@@ -85,6 +85,7 @@
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\QueueItem.cs" />
     <Compile Include="Views\Start.xaml.cs">
       <DependentUpon>Start.xaml</DependentUpon>
     </Compile>
@@ -281,6 +282,12 @@
     <Resource Include="Resources\Page\TextBox\Background.NoFocus.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Down.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Down.Pressed.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Up.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Up.Pressed.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Dialog\Background.png" />
   </ItemGroup>
   <ItemGroup>
@@ -358,6 +365,19 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Views\Start\Start.Remote.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\Button\Background.Wide.NoFocus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Down.Disabled.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Left.Disabled.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Left.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Left.Pressed.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Right.Disabled.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Right.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Right.Pressed.png" />
+    <Resource Include="Resources\Page\ScrollBar\Arrow.Up.Disabled.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
