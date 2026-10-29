@@ -14,8 +14,20 @@ namespace MCERemote.Core
         public bool Shuffle { get; set; }
         public bool Repeat { get; set; }
 
+        /// <summary>
+        /// Number of items in the playback queue.
+        /// </summary>
+        public int QueueLength { get; set; }
+
+        /// <summary>
+        /// 1-based position of the current item in the playback queue, or 0 if unknown.
+        /// </summary>
+        public int QueuePosition { get; set; }
+
         public static PlayerStatus Unknown { get; private set; } = new PlayerStatus
         {
+            QueueLength = 0,
+            QueuePosition = 0,
             SourceURL = "",
             PlaylistName = "",
             State = PlayerState.Unknown,

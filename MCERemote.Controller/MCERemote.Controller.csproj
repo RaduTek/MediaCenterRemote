@@ -65,6 +65,8 @@
     <Compile Include="Controls\TextBox.cs" />
     <Compile Include="Controls\ViewFrame.cs" />
     <Compile Include="ImageLoader.cs" />
+    <Compile Include="PlaybackQueue.cs" />
+    <Compile Include="QueueItem.cs" />
     <Compile Include="Layout\ControlBar.xaml.cs">
       <DependentUpon>ControlBar.xaml</DependentUpon>
     </Compile>
@@ -88,7 +90,6 @@
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\QueueItem.cs" />
     <Compile Include="Views\Start.xaml.cs">
       <DependentUpon>Start.xaml</DependentUpon>
     </Compile>

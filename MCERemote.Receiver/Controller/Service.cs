@@ -113,16 +113,23 @@ namespace MCERemote.Receiver.Controller
 
             try
             {
+                // Each property access is a cross-process COM call, so fetch these once
+                var playlist = player.currentPlaylist;
+                var current = player.currentMedia;
+                var queueLength = playlist?.count ?? 0;
+
                 var status = new PlayerStatus()
                 {
-                    SourceURL = player.currentMedia?.sourceURL,
-                    PlaylistName = player.currentPlaylist?.name,
+                    SourceURL = current?.sourceURL,
+                    PlaylistName = playlist?.name,
                     State = GetPlayerState(),
                     Volume = player.settings.volume,
                     Mute = player.settings.mute,
                     Shuffle = player.settings.getMode("shuffle"),
                     Repeat = player.settings.getMode("loop"),
-                    Position = TimeSpan.FromSeconds(Math.Floor(player.controls.currentPosition))
+                    Position = TimeSpan.FromSeconds(Math.Floor(player.controls.currentPosition)),
+                    QueueLength = queueLength,
+                    QueuePosition = FindQueuePosition(playlist, current, queueLength)
                 };
 
                 return status;
@@ -140,16 +147,60 @@ namespace MCERemote.Receiver.Controller
 
             try
             {
-                // Each property access is a cross-process COM call, so fetch these once
                 var playlist = player.currentPlaylist;
-                var current = player.currentMedia;
-                var count = playlist.count;
+                return FindQueuePosition(playlist, player.currentMedia, playlist.count);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        // 0-based index where the current media was last found, checked first on the next lookup
+        private static int lastQueueIndex = 0;
+
+        // Media and queue length of the last full scan that found nothing, so it isn't repeated every poll
+        private static string notFoundSourceURL = null;
+        private static int notFoundCount = -1;
+
+        /// <summary>
+        /// Finds the 1-based position of the current media in the playlist, or 0 if not found.
+        /// Checks around the last known position first, so the status poll usually needs only
+        /// a few COM calls instead of scanning the whole queue.
+        /// </summary>
+        private static int FindQueuePosition(IWMPPlaylist playlist, IWMPMedia current, int count)
+        {
+            if (playlist == null || current == null || count == 0)
+                return 0;
+
+            try
+            {
+                foreach (var offset in new[] { 0, 1, -1, 2, -2 })
+                {
+                    var i = lastQueueIndex + offset;
+                    if (i >= 0 && i < count && current.isIdentical[playlist.Item[i]])
+                    {
+                        lastQueueIndex = i;
+                        return i + 1;
+                    }
+                }
+
+                var sourceURL = current.sourceURL;
+                if (sourceURL == notFoundSourceURL && count == notFoundCount)
+                    return 0;
 
                 for (int i = 0; i < count; i++)
                 {
                     if (current.isIdentical[playlist.Item[i]])
+                    {
+                        lastQueueIndex = i;
+                        notFoundSourceURL = null;
                         return i + 1;
+                    }
                 }
+
+                notFoundSourceURL = sourceURL;
+                notFoundCount = count;
             }
             catch
             { }
@@ -423,23 +474,49 @@ namespace MCERemote.Receiver.Controller
                 var count = currentPlaylist.count;
 
                 for (int i = 0; i < count; i++)
-                {
-                    var item = currentPlaylist.Item[i];
-
-                    playlist.Add(new PlaylistItem
-                    {
-                        Index = i + 1,
-                        Title = item.name,
-                        Artist = item.getItemInfo("WM/Artist"),
-                        SourceURL = item.sourceURL,
-                        Duration = TimeSpan.FromSeconds(item.duration)
-                    });
-                }
+                    playlist.Add(ToPlaylistItem(currentPlaylist.Item[i], i + 1));
             }
             catch
             { }
 
             return playlist;
+        }
+
+        public List<PlaylistItem> GetQueueRange(int start, int count)
+        {
+            var range = new List<PlaylistItem>();
+
+            if (!CheckCurrentMedia())
+                return range;
+
+            try
+            {
+                // Each property access is a cross-process COM call, so fetch the playlist once
+                var currentPlaylist = player.currentPlaylist;
+                var length = currentPlaylist.count;
+
+                var first = Math.Max(1, start);
+                var last = Math.Min(length, start + count - 1);
+
+                for (int index = first; index <= last; index++)
+                    range.Add(ToPlaylistItem(currentPlaylist.Item[index - 1], index));
+            }
+            catch
+            { }
+
+            return range;
+        }
+
+        private static PlaylistItem ToPlaylistItem(IWMPMedia item, int index)
+        {
+            return new PlaylistItem
+            {
+                Index = index,
+                Title = item.name,
+                Artist = item.getItemInfo("WM/Artist"),
+                SourceURL = item.sourceURL,
+                Duration = TimeSpan.FromSeconds(item.duration)
+            };
         }
 
         public void PlayQueueItem(int index)

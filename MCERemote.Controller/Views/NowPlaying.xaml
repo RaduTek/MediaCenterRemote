@@ -7,7 +7,8 @@
       d:DesignHeight="600" d:DesignWidth="1024"
       Title="Now Playing"
       ShowNowPlayingOverlay="False"
-      Loaded="PageView_Loaded">
+      Loaded="PageView_Loaded"
+      Unloaded="PageView_Unloaded">
     <Controls:PageView.Resources>
         <DataTemplate x:Key="QueueItemTemplate">
             <Grid>
@@ -20,16 +21,28 @@
 
                 <Path x:Name="CurrentMarker" Grid.Column="0" Data="M 0 0 L 10 6 L 0 12 Z" Fill="#FFF"
                       VerticalAlignment="Center" Margin="0 2 10 0" Visibility="Collapsed" />
-                <TextBlock Grid.Column="1" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
-                <TextBlock Grid.Column="2" Text="{Binding Artist}" Foreground="#8FFF" MaxWidth="200"
+                <TextBlock x:Name="TitleText" Grid.Column="1" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="LoadingText" Grid.Column="1" Text="Loading..." Foreground="#8FFF" Visibility="Collapsed" />
+                <TextBlock x:Name="ArtistText" Grid.Column="2" Text="{Binding Artist}" Foreground="#8FFF" MaxWidth="200"
                            TextTrimming="CharacterEllipsis" Margin="15 0 0 0" />
-                <TextBlock Grid.Column="3" Text="{Binding DurationText}" Foreground="#8FFF" Margin="15 0 0 0" />
+                <TextBlock x:Name="DurationText" Grid.Column="3" Text="{Binding DurationText}" Foreground="#8FFF" Margin="15 0 0 0" />
             </Grid>
 
             <DataTemplate.Triggers>
                 <DataTrigger Binding="{Binding IsCurrent}" Value="True">
                     <Setter TargetName="CurrentMarker" Property="Visibility" Value="Visible" />
                 </DataTrigger>
+
+                <!-- Never loaded yet; outdated items keep showing their old details until reloaded -->
+                <MultiDataTrigger>
+                    <MultiDataTrigger.Conditions>
+                        <Condition Binding="{Binding IsLoaded}" Value="False" />
+                        <Condition Binding="{Binding Title}" Value="" />
+                    </MultiDataTrigger.Conditions>
+                    <Setter TargetName="LoadingText" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="ArtistText" Property="Visibility" Value="Collapsed" />
+                    <Setter TargetName="DurationText" Property="Visibility" Value="Collapsed" />
+                </MultiDataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
     </Controls:PageView.Resources>
@@ -82,6 +95,8 @@
                          Style="{StaticResource Page.List}"
                          ItemContainerStyle="{StaticResource Page.List.Item}"
                          ItemTemplate="{StaticResource QueueItemTemplate}"
+                         ScrollViewer.ScrollChanged="QueueList_ScrollChanged"
+                         GotFocus="QueueList_GotFocus"
                          PreviewKeyDown="QueueList_PreviewKeyDown"
                          PreviewKeyUp="QueueList_PreviewKeyUp"
                          PreviewMouseLeftButtonDown="QueueList_PreviewMouseLeftButtonDown"

@@ -1,12 +1,11 @@
 ﻿using MCERemote.Core;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace MCERemote.Controller.Views
 {
@@ -46,8 +45,9 @@ namespace MCERemote.Controller.Views
                 ViewCoverButton.IsChecked = !value;
                 ViewQueueButton.IsChecked = value;
 
+                // Only shows what's already loaded, the queue is loaded in the background
                 if (value)
-                    LoadQueue();
+                    ShowQueueView();
             }
         }
 
@@ -56,10 +56,7 @@ namespace MCERemote.Controller.Views
         private void PageView_Loaded(object sender, RoutedEventArgs e)
         {
             if (ShowQueue)
-            {
                 ViewQueueButton.Focus();
-                LoadQueue();
-            }
             else
                 ViewCoverButton.Focus();
 
@@ -74,18 +71,25 @@ namespace MCERemote.Controller.Views
             Connection.NowPlayingChanged -= Connection_NowPlayingChanged;
             Connection.PlayerStatusUpdated += Connection_StatusUpdated;
             Connection.NowPlayingChanged += Connection_NowPlayingChanged;
+            AttachQueue();
 
             Connection.RefreshNow();
 
             LoadMediaInfo(Connection.NowPlaying);
+
+            if (ShowQueue)
+                ShowQueueView();
+        }
+
+        private void PageView_Unloaded(object sender, RoutedEventArgs e)
+        {
+            DetachQueue();
         }
 
         private void Connection_NowPlayingChanged(object sender, NowPlayingChangedEventArgs e)
         {
             LoadMediaInfo(e.NowPlaying);
-
-            if (ShowQueue)
-                RefreshQueuePosition(e.NowPlaying.SourceURL);
+            QueueTrackChanged();
         }
 
         private void Connection_StatusUpdated(object sender, EventArgs e)
@@ -152,102 +156,185 @@ namespace MCERemote.Controller.Views
 
         #region Queue
 
-        private List<QueueItem> queue = new List<QueueItem>();
+        // The queue is owned by the connection and loaded in the background, the view only
+        // requests the regions it shows
+        private PlaybackQueue Queue => Connection?.Queue;
 
-        // Incremented on every queue load so results of outdated requests are ignored
-        private int queueLoadId = 0;
+        private int QueueLength => Queue?.Length ?? 0;
 
         private ListBoxItem pressedQueueItem;
 
-        private void LoadQueue()
+        // Position the view waits on to be loaded before focusing it, 0 if not waiting
+        private int awaitedQueuePosition = 0;
+
+        // Current position as last seen by the view, to tell if focus rests on the playing track
+        private int lastCurrentPosition = 0;
+
+        // 0-based index of the queue item that last had focus, restored after the queue is resized
+        private int lastFocusedQueueIndex = -1;
+
+        // Debounces loading while scrolling
+        private DispatcherTimer queueScrollTimer;
+
+        private void AttachQueue()
         {
-            var loadId = ++queueLoadId;
-            var controller = Connection?.Controller;
-
-            queue = new List<QueueItem>();
-            QueueList.ItemsSource = null;
-            QueueStatus.Visibility = Visibility.Collapsed;
-            IsLoading = true;
-
-            ThreadPool.QueueUserWorkItem(_ =>
-            {
-                List<PlaylistItem> playlist = null;
-                var position = 0;
-
-                try
-                {
-                    if (controller != null)
-                    {
-                        playlist = controller.GetNowPlayingPlaylist();
-                        position = controller.GetQueuePosition();
-                    }
-                }
-                catch
-                { }
-
-                App.Current.Dispatcher.Invoke((Action)(() =>
-                {
-                    // A newer load is in progress and will clear the loading state
-                    if (loadId != queueLoadId)
-                        return;
-
-                    // Stop loading before focusing an item, as input is blocked while loading
-                    IsLoading = false;
-
-                    queue = (playlist ?? new List<PlaylistItem>()).Select(item => new QueueItem(item)).ToList();
-                    QueueList.ItemsSource = queue;
-
-                    if (queue.Count == 0)
-                    {
-                        QueueStatus.Text = "The queue is empty";
-                        QueueStatus.Visibility = Visibility.Visible;
-                        return;
-                    }
-
-                    UpdateQueueListHeight();
-                    SetCurrentQueueItem(position, true);
-                }));
-            });
-        }
-
-        private void RefreshQueuePosition(string sourceURL)
-        {
-            var loadId = queueLoadId;
-            var controller = Connection?.Controller;
-            if (controller == null)
+            var queue = Queue;
+            if (queue == null)
                 return;
 
-            ThreadPool.QueueUserWorkItem(_ =>
+            if (QueueList.ItemsSource != queue.Items)
+                QueueList.ItemsSource = queue.Items;
+
+            queue.Resized -= Queue_Resized;
+            queue.RangeLoaded -= Queue_RangeLoaded;
+            queue.Resized += Queue_Resized;
+            queue.RangeLoaded += Queue_RangeLoaded;
+        }
+
+        private void DetachQueue()
+        {
+            var queue = Queue;
+            if (queue != null)
             {
-                var position = 0;
+                queue.Resized -= Queue_Resized;
+                queue.RangeLoaded -= Queue_RangeLoaded;
+            }
 
-                try
+            queueScrollTimer?.Stop();
+            awaitedQueuePosition = 0;
+            IsLoading = false;
+        }
+
+        /// <summary>
+        /// Shows the queue as currently loaded and focuses the playing track. Only waits
+        /// (with the loading overlay) if the region around the playing track isn't loaded yet.
+        /// </summary>
+        private void ShowQueueView()
+        {
+            var queue = Queue;
+            awaitedQueuePosition = 0;
+            IsLoading = false;
+
+            if (queue == null || queue.Length == 0)
+            {
+                QueueStatus.Text = "The queue is empty";
+                QueueStatus.Visibility = Visibility.Visible;
+                return;
+            }
+
+            QueueStatus.Visibility = Visibility.Collapsed;
+            UpdateQueueListHeight();
+
+            var position = queue.CurrentPosition > 0 ? queue.CurrentPosition : 1;
+            lastCurrentPosition = queue.CurrentPosition;
+
+            if (queue.IsRangeLoaded(position))
+            {
+                FocusQueueItem(position - 1, true);
+                return;
+            }
+
+            awaitedQueuePosition = position;
+            IsLoading = true;
+            queue.RequestRange(position);
+        }
+
+        /// <summary>
+        /// Requests the items around the middle of the visible part of the list.
+        /// </summary>
+        private void RequestVisibleQueueRange()
+        {
+            var queue = Queue;
+            var scroller = QueueList.Template?.FindName("ListScroller", QueueList) as ScrollViewer;
+            if (queue == null || scroller == null || !ShowQueue)
+                return;
+
+            // Item based scrolling, so offsets are in items
+            var first = (int)scroller.VerticalOffset + 1;
+            var visible = (int)scroller.ViewportHeight;
+            queue.RequestRange(first + visible / 2);
+        }
+
+        private void Queue_RangeLoaded(object sender, QueueRangeLoadedEventArgs e)
+        {
+            var position = awaitedQueuePosition;
+            if (position == 0 || position < e.Start || position >= e.Start + e.Count)
+                return;
+
+            // Stop loading before focusing an item, as input is blocked while loading
+            awaitedQueuePosition = 0;
+            IsLoading = false;
+            FocusQueueItem(position - 1, true);
+        }
+
+        private void Queue_Resized(object sender, EventArgs e)
+        {
+            if (!ShowQueue)
+                return;
+
+            // Waiting on a position that may have moved or been cancelled, so start over
+            if (awaitedQueuePosition > 0 || QueueLength == 0)
+            {
+                ShowQueueView();
+                return;
+            }
+
+            QueueStatus.Visibility = Visibility.Collapsed;
+            UpdateQueueListHeight();
+
+            // Keep focus on the same position unless the user moved to the side buttons
+            if (!CommonView.IsKeyboardFocusWithin && lastFocusedQueueIndex >= 0)
+                FocusQueueItem(Math.Min(lastFocusedQueueIndex, QueueLength - 1), false);
+
+            // Refresh only the region the user is looking at
+            RequestVisibleQueueRange();
+        }
+
+        private void QueueTrackChanged()
+        {
+            var queue = Queue;
+            if (queue == null || !ShowQueue)
+                return;
+
+            // The queue was replaced while waiting, so wait on the new playing track instead
+            if (awaitedQueuePosition > 0)
+            {
+                ShowQueueView();
+                return;
+            }
+
+            // Only move focus along if it was resting on the previously playing track
+            var position = queue.CurrentPosition;
+            var previousContainer = lastCurrentPosition < 1 ? null :
+                QueueList.ItemContainerGenerator.ContainerFromIndex(lastCurrentPosition - 1) as UIElement;
+
+            if (previousContainer != null && previousContainer.IsKeyboardFocused && position >= 1 && position <= queue.Length)
+                FocusQueueItem(position - 1, false);
+
+            lastCurrentPosition = position;
+        }
+
+        private void QueueList_GotFocus(object sender, RoutedEventArgs e)
+        {
+            var container = e.OriginalSource as ListBoxItem;
+            if (container != null)
+                lastFocusedQueueIndex = QueueList.ItemContainerGenerator.IndexFromContainer(container);
+        }
+
+        private void QueueList_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            if (queueScrollTimer == null)
+            {
+                queueScrollTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(150) };
+                queueScrollTimer.Tick += (s, args) =>
                 {
-                    position = controller.GetQueuePosition();
-                }
-                catch
-                { }
+                    queueScrollTimer.Stop();
+                    RequestVisibleQueueRange();
+                };
+            }
 
-                App.Current.Dispatcher.Invoke((Action)(() =>
-                {
-                    if (loadId != queueLoadId || !ShowQueue)
-                        return;
-
-                    // The queue itself changed, so load it again
-                    if (position < 1 || position > queue.Count || queue[position - 1].SourceURL != sourceURL)
-                    {
-                        LoadQueue();
-                        return;
-                    }
-
-                    // Only move focus along if it was resting on the previously playing track
-                    var previous = queue.FindIndex(item => item.IsCurrent);
-                    var previousContainer = previous < 0 ? null : QueueList.ItemContainerGenerator.ContainerFromIndex(previous) as UIElement;
-                    var followFocus = previousContainer != null && previousContainer.IsKeyboardFocused;
-
-                    SetCurrentQueueItem(position, followFocus);
-                }));
-            });
+            queueScrollTimer.Stop();
+            queueScrollTimer.Start();
         }
 
         // Height of one list item including its margin, measured from a realized item
@@ -259,7 +346,7 @@ namespace MCERemote.Controller.Views
         /// </summary>
         private void UpdateQueueListHeight()
         {
-            if (queueItemHeight <= 0 && queue.Count > 0)
+            if (queueItemHeight <= 0 && QueueLength > 0)
             {
                 QueueList.UpdateLayout();
                 var container = QueueList.ItemContainerGenerator.ContainerFromIndex(0) as FrameworkElement;
@@ -280,18 +367,9 @@ namespace MCERemote.Controller.Views
             UpdateQueueListHeight();
         }
 
-        private void SetCurrentQueueItem(int position, bool focus)
-        {
-            foreach (var item in queue)
-                item.IsCurrent = item.Index == position;
-
-            if (focus && position >= 1 && position <= queue.Count)
-                FocusQueueItem(position - 1, true);
-        }
-
         private void FocusQueueItem(int index, bool center)
         {
-            if (!IsLoaded || !ShowQueue)
+            if (!IsLoaded || !ShowQueue || index < 0 || index >= QueueLength)
                 return;
 
             QueueList.SelectedIndex = index;
@@ -302,7 +380,7 @@ namespace MCERemote.Controller.Views
                 // Item based scrolling, so offsets are in items
                 scroller.ScrollToVerticalOffset(Math.Max(0, index - Math.Floor(scroller.ViewportHeight / 2)));
             else
-                QueueList.ScrollIntoView(queue[index]);
+                QueueList.ScrollIntoView(Queue.Items[index]);
 
             QueueList.UpdateLayout();
 
@@ -391,7 +469,7 @@ namespace MCERemote.Controller.Views
 
         private void SideButtons_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Right || !ShowQueue || queue.Count == 0)
+            if (e.Key != Key.Right || !ShowQueue || QueueLength == 0)
                 return;
 
             FocusQueueItem(Math.Max(0, QueueList.SelectedIndex), false);

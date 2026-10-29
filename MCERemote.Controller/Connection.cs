@@ -50,12 +50,26 @@ namespace MCERemote.Controller
         }
     }
 
+    public class QueueLengthChangedEventArgs : EventArgs
+    {
+        public int OldLength { get; private set; }
+
+        public int NewLength { get; private set; }
+
+        public QueueLengthChangedEventArgs(int oldLength, int newLength)
+        {
+            OldLength = oldLength;
+            NewLength = newLength;
+        }
+    }
+
     #endregion
 
     public class Connection
     {
         public Connection()
         {
+            Queue = new PlaybackQueue(this);
         }
 
         #region Fields
@@ -98,12 +112,18 @@ namespace MCERemote.Controller
 
         public MediaInfo NowPlaying { get; private set; }
 
+        /// <summary>
+        /// Gets the playback queue, which is kept up to date and loaded in the background.
+        /// </summary>
+        public PlaybackQueue Queue { get; private set; }
+
         #endregion
 
         #region Events
 
         public EventHandler<PlayerStatusUpdatedEventArgs> PlayerStatusUpdated;
         public EventHandler<NowPlayingChangedEventArgs> NowPlayingChanged;
+        public EventHandler<QueueLengthChangedEventArgs> QueueLengthChanged;
 
         public EventHandler<ConnectionFaultedEventArgs> Faulted;
         public EventHandler<ConnectionClosedEventArgs> Closed;
@@ -207,8 +227,13 @@ namespace MCERemote.Controller
 
         private void ResetPlayerStatus()
         {
+            var oldQueueLength = PlayerStatus?.QueueLength ?? 0;
+
             NowPlaying = new MediaInfo();
             PlayerStatus = PlayerStatus.Unknown;
+
+            if (oldQueueLength != 0)
+                QueueLengthChanged?.Invoke(this, new QueueLengthChangedEventArgs(oldQueueLength, 0));
 
             PlayerStatusUpdated?.Invoke(this, new PlayerStatusUpdatedEventArgs(PlayerStatus));
         }
@@ -233,7 +258,12 @@ namespace MCERemote.Controller
 
                         App.Current.Dispatcher.Invoke((Action)(() =>
                         {
+                            var oldQueueLength = PlayerStatus.QueueLength;
                             PlayerStatus = status;
+
+                            // Raised before NowPlayingChanged, so the queue is resized before it looks up the new track
+                            if (PlayerStatus.QueueLength != oldQueueLength)
+                                QueueLengthChanged?.Invoke(this, new QueueLengthChangedEventArgs(oldQueueLength, PlayerStatus.QueueLength));
 
                             if (PlayerStatus.SourceURL != NowPlaying.SourceURL)
                             {

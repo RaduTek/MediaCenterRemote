@@ -50,6 +50,9 @@ namespace MCERemote.Core
         List<PlaylistItem> GetNowPlayingPlaylist();
 
         [OperationContract]
+        List<PlaylistItem> GetQueueRange(int start, int count);
+
+        [OperationContract]
         void PlayQueueItem(int index);
     }
 }
