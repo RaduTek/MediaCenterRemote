@@ -538,9 +538,239 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!--#endregion-->
-    
+
+    <!--#region Scroll Bar-->
+
+    <Style x:Key="Page.ScrollBar.Arrow" TargetType="RepeatButton">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Height" Value="32" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Interval" Value="100" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border x:Name="arrowBorder">
+                        <Border.Background>
+                            <ImageBrush ImageSource="{DynamicResource ScrollBar.Arrow.Normal}" />
+                        </Border.Background>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="arrowBorder" Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{DynamicResource ScrollBar.Arrow.Pressed}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Page.ScrollBar.Arrow.Up" TargetType="RepeatButton" BasedOn="{StaticResource Page.ScrollBar.Arrow}">
+        <Style.Resources>
+            <BitmapImage x:Key="ScrollBar.Arrow.Normal" UriSource="ScrollBar/Arrow.Up.png" />
+            <BitmapImage x:Key="ScrollBar.Arrow.Pressed" UriSource="ScrollBar/Arrow.Up.Pressed.png" />
+        </Style.Resources>
+    </Style>
+
+    <Style x:Key="Page.ScrollBar.Arrow.Down" TargetType="RepeatButton" BasedOn="{StaticResource Page.ScrollBar.Arrow}">
+        <Style.Resources>
+            <BitmapImage x:Key="ScrollBar.Arrow.Normal" UriSource="ScrollBar/Arrow.Down.png" />
+            <BitmapImage x:Key="ScrollBar.Arrow.Pressed" UriSource="ScrollBar/Arrow.Down.Pressed.png" />
+        </Style.Resources>
+    </Style>
+
+    <!-- Invisible page up / page down areas above and below the thumb -->
+    <Style x:Key="Page.ScrollBar.Page" TargetType="RepeatButton">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="Transparent" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Page.ScrollBar.Thumb" TargetType="Thumb">
+        <Setter Property="MinHeight" Value="32" />
+        <Setter Property="Background" Value="#6FFF" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Border x:Name="thumbBorder" Background="{TemplateBinding Background}" CornerRadius="4" />
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="thumbBorder" Property="Background" Value="#AFFF" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Page.ScrollBar" TargetType="ScrollBar">
+        <Setter Property="Width" Value="32" />
+        <Setter Property="Background" Value="#2FFF" />
+        <Setter Property="MinWidth" Value="32" />
+        <Setter Property="Margin" Value="8 0 0 0" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="IsTabStop" Value="False" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollBar">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <RepeatButton Grid.Row="0" Style="{StaticResource Page.ScrollBar.Arrow.Up}" Command="ScrollBar.LineUpCommand" />
+
+                        <Border Grid.Row="1" Background="{TemplateBinding Background}" CornerRadius="4" Margin="0,3" />
+
+                        <Track x:Name="PART_Track" Grid.Row="1" IsDirectionReversed="True" Margin="0,3">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource Page.ScrollBar.Page}" Command="ScrollBar.PageUpCommand" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource Page.ScrollBar.Thumb}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource Page.ScrollBar.Page}" Command="ScrollBar.PageDownCommand" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+
+                        <RepeatButton Grid.Row="2" Style="{StaticResource Page.ScrollBar.Arrow.Down}" Command="ScrollBar.LineDownCommand" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Page.ScrollViewer" TargetType="ScrollViewer">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ScrollContentPresenter x:Name="PART_ScrollContentPresenter" Grid.Column="0"
+                                                CanContentScroll="{TemplateBinding CanContentScroll}"
+                                                Margin="{TemplateBinding Padding}" />
+
+                        <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="1"
+                                   Style="{StaticResource Page.ScrollBar}"
+                                   Orientation="Vertical"
+                                   Minimum="0"
+                                   Value="{TemplateBinding VerticalOffset}"
+                                   Maximum="{TemplateBinding ScrollableHeight}"
+                                   ViewportSize="{TemplateBinding ViewportHeight}"
+                                   Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--#endregion-->
+
+    <!--#region List-->
+
+    <Style x:Key="Page.List" TargetType="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="SelectionMode" Value="Single" />
+        <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+        <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="True" />
+        <Setter Property="VirtualizingStackPanel.VirtualizationMode" Value="Recycling" />
+        <Setter Property="KeyboardNavigation.DirectionalNavigation" Value="Contained" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBox">
+                    <ScrollViewer x:Name="ListScroller" Style="{StaticResource Page.ScrollViewer}"
+                                  CanContentScroll="{TemplateBinding ScrollViewer.CanContentScroll}">
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Page.List.Item" TargetType="ListBoxItem">
+        <Style.Resources>
+            <BitmapImage x:Key="Button.Background.NoFocus" UriSource="Button/Background.Wide.NoFocus.png" />
+            <BitmapImage x:Key="Button.Background.Focus" UriSource="Button/Background.Wide.Focus.png" />
+            <BitmapImage x:Key="Button.Background.Highlight" UriSource="Button/Background.Wide.Highlight.png" />
+        </Style.Resources>
+
+        <Setter Property="Foreground" Value="#FFF" />
+        <Setter Property="FontSize" Value="23" />
+        <Setter Property="FontFamily" Value="Segoe UI Semibold" />
+        <Setter Property="Margin" Value="1" />
+        <Setter Property="Padding" Value="15 6 15 9" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="itemBorder" Height="45">
+                        <Border.Background>
+                            <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}" />
+                        </Border.Background>
+                        <Border x:Name="itemHighlight" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                        </Border>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="itemBorder" Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Focus}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+
+                        <Trigger Property="Controls:ButtonHelper.IsEnterPressed" Value="True">
+                            <Setter TargetName="itemHighlight" Property="Background">
+                                <Setter.Value>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--#endregion-->
+
     <!--#endregion-->
 
 </ResourceDictionary>
