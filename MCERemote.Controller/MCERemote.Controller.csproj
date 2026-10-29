@@ -295,5 +295,22 @@
     <Resource Include="Resources\ControlBar\Group.2.Wide.png" />
     <Resource Include="Resources\ControlBar\Group.3.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\TitleBar\Buttons\Back.Disabled.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Back.Normal.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Back.Pressed.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Blank.Disabled.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Blank.Normal.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Blank.Pressed.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Help.Disabled.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Help.Normal.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Help.Pressed.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Settings.Disabled.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Settings.Normal.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Settings.Pressed.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Start.Disabled.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Start.Normal.2x.png" />
+    <Resource Include="Resources\TitleBar\Buttons\Start.Pressed.2x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

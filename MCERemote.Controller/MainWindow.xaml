@@ -21,19 +21,17 @@
             </Border.Background>
         </Border>
 
-        <Grid Margin="0 32 0 0">
-            <Grid x:Name="ContentGrid">
-                <Controls:ViewFrame x:Name="ViewFrame" 
-                                    HistoryChanged="ViewFrame_HistoryChanged" />
+        <Grid x:Name="ContentGrid">
+            <Controls:ViewFrame x:Name="ViewFrame" 
+                                HistoryChanged="ViewFrame_HistoryChanged" />
 
-                <Layout:ControlBar x:Name="ControlBar" />
-            </Grid>
-
-            <Controls:DialogHost x:Name="DialogHost" 
-                                 Opened="DialogHost_Opened" 
-                                 Closed="DialogHost_Closed" />
-
+            <Layout:ControlBar x:Name="ControlBar" />
         </Grid>
+
+        <Controls:DialogHost x:Name="DialogHost" 
+                                Opened="DialogHost_Opened" 
+                                Closed="DialogHost_Closed" />
+
 
         <Layout:TitleBar x:Name="TitleBar" 
                              CanGoToStart="False" 

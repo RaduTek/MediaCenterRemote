@@ -3,13 +3,13 @@
 
     <Style x:Key="TitleBar.Button" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Blank.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.Normal.png"/>
-            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Blank.Pressed.png"/>
+            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Blank.Disabled.2x.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.Normal.2x.png"/>
+            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Blank.Pressed.2x.png"/>
         </Style.Resources>
 
-        <Setter Property="Width" Value="32" />
-        <Setter Property="Height" Value="32" />
+        <Setter Property="Width" Value="42" />
+        <Setter Property="Height" Value="42" />
         <Setter Property="HorizontalAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Focusable" Value="False" />
@@ -49,45 +49,45 @@
 
     <Style x:Key="TitleBar.Button.Back" BasedOn="{StaticResource TitleBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Back.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Back.Normal.png"/>
-            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Back.Pressed.png"/>
+            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Back.Disabled.2x.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Back.Normal.2x.png"/>
+            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Back.Pressed.2x.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="TitleBar.Button.Blank" BasedOn="{StaticResource TitleBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Blank.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.Normal.png"/>
-            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Blank.Pressed.png"/>
+            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Blank.Disabled.2x.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Blank.Normal.2x.png"/>
+            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Blank.Pressed.2x.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="TitleBar.Button.Help" BasedOn="{StaticResource TitleBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Help.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Help.Normal.png"/>
-            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Help.Pressed.png"/>
+            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Help.Disabled.2x.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Help.Normal.2x.png"/>
+            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Help.Pressed.2x.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="TitleBar.Button.Settings" BasedOn="{StaticResource TitleBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Settings.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Settings.Normal.png"/>
-            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Settings.Pressed.png"/>
+            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Settings.Disabled.2x.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Settings.Normal.2x.png"/>
+            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Settings.Pressed.2x.png"/>
         </Style.Resources>
     </Style>
 
     <Style x:Key="TitleBar.Button.Start" BasedOn="{StaticResource TitleBar.Button}" TargetType="Button">
         <Style.Resources>
-            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Start.Disabled.png"/>
-            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Start.Normal.png"/>
-            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Start.Pressed.png"/>
+            <BitmapImage x:Key="Button.Disabled" UriSource="Buttons/Start.Disabled.2x.png"/>
+            <BitmapImage x:Key="Button.Normal" UriSource="Buttons/Start.Normal.2x.png"/>
+            <BitmapImage x:Key="Button.Pressed" UriSource="Buttons/Start.Pressed.2x.png"/>
         </Style.Resources>
 
-        <Setter Property="Width" Value="48" />
-        <Setter Property="Height" Value="37" />
+        <Setter Property="Width" Value="62" />
+        <Setter Property="Height" Value="47" />
         <Setter Property="VerticalAlignment" Value="Bottom" />
     </Style>
 
