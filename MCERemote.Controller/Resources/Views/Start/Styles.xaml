@@ -30,6 +30,15 @@
         <Setter Property="Margin" Value="0,-32,-32,0" />
     </Style>
 
+    <!-- Shows and fades out the pressed highlight layer named "highlight" -->
+    <Storyboard x:Key="Start.Tile.Highlight.Show">
+        <DoubleAnimation Storyboard.TargetName="highlight" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
+    </Storyboard>
+
+    <Storyboard x:Key="Start.Tile.Highlight.Hide">
+        <DoubleAnimation Storyboard.TargetName="highlight" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.4" />
+    </Storyboard>
+
     <Style x:Key="Start.Tile" TargetType="Controls:StartTile">
         <Style.Resources>
             <BitmapImage x:Key="Tile.Background.NoFocus" UriSource="Background.NoFocus.png" />
@@ -53,7 +62,12 @@
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Tile.Background.NoFocus}"/>
                         </Border.Background>
-                        <Grid x:Name="tileHighlight">
+                        <Grid>
+                            <Border x:Name="highlight" Opacity="0">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{DynamicResource Tile.Background.Highlight}"/>
+                                </Border.Background>
+                            </Border>
                             <Grid Margin="{TemplateBinding Padding}" ClipToBounds="True">
                                 <Image x:Name="tileImage" Source="{TemplateBinding Image}" Style="{StaticResource Start.Tile.Image}" />
                                 <ContentPresenter x:Name="tileText" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
@@ -76,11 +90,12 @@
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="tileHighlight" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Tile.Background.Highlight}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Start.Tile.Highlight.Show}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Start.Tile.Highlight.Hide}" />
+                            </Trigger.ExitActions>
                         </Trigger>
 
                         <MultiTrigger>
@@ -88,11 +103,12 @@
                                 <Condition Property="IsFocused" Value="True" />
                                 <Condition Property="Controls:ButtonHelper.IsEnterPressed" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="tileHighlight" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Tile.Background.Highlight}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Start.Tile.Highlight.Show}" />
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Start.Tile.Highlight.Hide}" />
+                            </MultiTrigger.ExitActions>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

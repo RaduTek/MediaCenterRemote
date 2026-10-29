@@ -129,6 +129,20 @@
 
     <!--#region Page Controls-->
 
+    <!--#region Press Highlight-->
+
+    <!-- Shows and fades out the pressed highlight layer of a control template. The layer must be
+         named "highlight" and start with Opacity 0. Use from trigger Enter/ExitActions. -->
+    <Storyboard x:Key="Page.Highlight.Show">
+        <DoubleAnimation Storyboard.TargetName="highlight" Storyboard.TargetProperty="Opacity" To="1" Duration="0" />
+    </Storyboard>
+
+    <Storyboard x:Key="Page.Highlight.Hide">
+        <DoubleAnimation Storyboard.TargetName="highlight" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.4" />
+    </Storyboard>
+
+    <!--#endregion-->
+
     <!--#region Buttons-->
 
     <Style x:Key="Page.Button" TargetType="Button">
@@ -153,9 +167,16 @@
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
-                        <Border x:Name="buttonHighlight" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter />
-                        </Border>
+                        <Grid>
+                            <Border x:Name="highlight" Opacity="0">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
+                                </Border.Background>
+                            </Border>
+                            <Border Padding="{TemplateBinding Padding}">
+                                <ContentPresenter />
+                            </Border>
+                        </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
@@ -177,11 +198,12 @@
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="buttonHighlight" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Show}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Hide}" />
+                            </Trigger.ExitActions>
                         </Trigger>
 
                         <MultiTrigger>
@@ -189,11 +211,12 @@
                                 <Condition Property="IsFocused" Value="True" />
                                 <Condition Property="Controls:ButtonHelper.IsEnterPressed" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="buttonHighlight" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Show}" />
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Hide}" />
+                            </MultiTrigger.ExitActions>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -230,17 +253,24 @@
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
-                        <Border x:Name="buttonHighlight" Padding="{TemplateBinding Padding}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-                                <ContentPresenter Grid.Column="0" />
-                                <Image x:Name="buttonSymbol" Grid.Column="1" Width="23"
-                                       Visibility="Collapsed" Source="Button/Checkmark.Focus.png"  />
-                            </Grid>
-                        </Border>
+                        <Grid>
+                            <Border x:Name="highlight" Opacity="0">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
+                                </Border.Background>
+                            </Border>
+                            <Border Padding="{TemplateBinding Padding}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0" />
+                                    <Image x:Name="buttonSymbol" Grid.Column="1" Width="23"
+                                           Visibility="Collapsed" Source="Button/Checkmark.Focus.png"  />
+                                </Grid>
+                            </Border>
+                        </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
@@ -267,11 +297,12 @@
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="buttonHighlight" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Show}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Hide}" />
+                            </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -301,17 +332,24 @@
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}"/>
                         </Border.Background>
-                        <Border x:Name="buttonHighlight" Padding="{TemplateBinding Padding}">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="auto" />
-                                </Grid.ColumnDefinitions>
-                                <ContentPresenter Grid.Column="0" />
-                                <Image x:Name="buttonSymbol" Grid.Column="1" Width="20"
-                                       Source="Button/Radio.Outline.NoFocus.png"  />
-                            </Grid>
-                        </Border>
+                        <Grid>
+                            <Border x:Name="highlight" Opacity="0">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
+                                </Border.Background>
+                            </Border>
+                            <Border Padding="{TemplateBinding Padding}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter Grid.Column="0" />
+                                    <Image x:Name="buttonSymbol" Grid.Column="1" Width="20"
+                                           Source="Button/Radio.Outline.NoFocus.png"  />
+                                </Grid>
+                            </Border>
+                        </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
@@ -338,11 +376,12 @@
                         </Trigger>
                         
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="buttonHighlight" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}"/>
-                                </Setter.Value>
-                            </Setter>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Show}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Hide}" />
+                            </Trigger.ExitActions>
                         </Trigger>
 
                         <MultiTrigger>
@@ -380,7 +419,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" Width="45" Height="45">
                             <Image x:Name="checkSymbol" Source="CheckBox/Unchecked.NoFocus.png" />
-                            <Image x:Name="checkHighlight" Source="CheckBox/Unchecked.Highlight.png" Visibility="Hidden" />
+                            <Image x:Name="highlight" Source="CheckBox/Unchecked.Highlight.png" Opacity="0" />
                         </Grid>
                         <Border Grid.Column="1" Padding="{TemplateBinding Padding}">
                             <ContentPresenter VerticalAlignment="Center" />
@@ -398,7 +437,12 @@
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="checkHighlight" Property="Visibility" Value="Visible" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Show}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Hide}" />
+                            </Trigger.ExitActions>
                         </Trigger>
 
                         <Trigger Property="IsChecked" Value="True">
@@ -421,14 +465,9 @@
                             <Setter TargetName="checkSymbol" Property="Source" Value="CheckBox/Checked.Focus.png" />
                         </MultiTrigger>
 
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="True" />
-                                <Condition Property="IsPressed" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="checkHighlight" Property="Source" Value="CheckBox/Checked.Highlight.png" />
-                            <Setter TargetName="checkHighlight" Property="Visibility" Value="Visible" />
-                        </MultiTrigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="highlight" Property="Source" Value="CheckBox/Checked.Highlight.png" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -453,7 +492,7 @@
                         </Grid.ColumnDefinitions>
                         <Grid Grid.Column="0" Width="45" Height="45">
                             <Image x:Name="checkSymbol" Source="RadioButton/Unchecked.NoFocus.png" />
-                            <Image x:Name="checkHighlight" Source="RadioButton/Unchecked.Highlight.png" Visibility="Hidden" />
+                            <Image x:Name="highlight" Source="RadioButton/Unchecked.Highlight.png" Opacity="0" />
                         </Grid>
                         <Border Grid.Column="1" Padding="{TemplateBinding Padding}">
                             <ContentPresenter VerticalAlignment="Center" />
@@ -471,7 +510,12 @@
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="checkHighlight" Property="Visibility" Value="Visible" />
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Show}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Hide}" />
+                            </Trigger.ExitActions>
                         </Trigger>
 
                         <Trigger Property="IsChecked" Value="True">
@@ -494,14 +538,9 @@
                             <Setter TargetName="checkSymbol" Property="Source" Value="RadioButton/Checked.Focus.png" />
                         </MultiTrigger>
 
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsChecked" Value="True" />
-                                <Condition Property="IsPressed" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="checkHighlight" Property="Source" Value="RadioButton/Checked.Highlight.png" />
-                            <Setter TargetName="checkHighlight" Property="Visibility" Value="Visible" />
-                        </MultiTrigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="highlight" Property="Source" Value="RadioButton/Checked.Highlight.png" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -742,9 +781,16 @@
                         <Border.Background>
                             <ImageBrush ImageSource="{DynamicResource Button.Background.NoFocus}" />
                         </Border.Background>
-                        <Border x:Name="itemHighlight" Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
-                        </Border>
+                        <Grid>
+                            <Border x:Name="highlight" Opacity="0">
+                                <Border.Background>
+                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}" />
+                                </Border.Background>
+                            </Border>
+                            <Border Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" />
+                            </Border>
+                        </Grid>
                     </Border>
 
                     <ControlTemplate.Triggers>
@@ -757,11 +803,12 @@
                         </Trigger>
 
                         <Trigger Property="Controls:ButtonHelper.IsEnterPressed" Value="True">
-                            <Setter TargetName="itemHighlight" Property="Background">
-                                <Setter.Value>
-                                    <ImageBrush ImageSource="{DynamicResource Button.Background.Highlight}" />
-                                </Setter.Value>
-                            </Setter>
+                            <Trigger.EnterActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Show}" />
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard Storyboard="{StaticResource Page.Highlight.Hide}" />
+                            </Trigger.ExitActions>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
