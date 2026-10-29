@@ -54,5 +54,17 @@ namespace MCERemote.Core
 
         [OperationContract]
         void PlayQueueItem(int index);
+
+        [OperationContract]
+        LibraryRange GetLibraryRange(LibraryQuery query, int start, int count, bool refresh);
+
+        [OperationContract]
+        LibraryInfo GetLibraryInfo(LibraryQuery query);
+
+        [OperationContract]
+        void PlaySong(string sourceURL);
+
+        [OperationContract]
+        void QueueSong(string sourceURL);
     }
 }

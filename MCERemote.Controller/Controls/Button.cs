@@ -54,6 +54,15 @@ namespace MCERemote.Controller.Controls
 
             base.OnKeyUp(e);
         }
+
+        protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+        {
+            // Enter may move focus away (e.g. to another page), so the key release won't reach
+            // this button to end the press
+            ButtonHelper.SetIsEnterPressed(this, false);
+
+            base.OnLostKeyboardFocus(e);
+        }
     }
 
     public class ButtonWide : Button

@@ -55,6 +55,32 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Connection.cs" />
+    <Compile Include="ChunkLoader.cs" />
+    <Compile Include="LibraryEntry.cs" />
+    <Compile Include="LibraryList.cs" />
+    <Compile Include="ResizableCollection.cs" />
+    <Compile Include="Controls\ListFitter.cs" />
+    <Compile Include="Controls\MenuDialog.cs" />
+    <Compile Include="Controls\TileButton.cs" />
+    <Compile Include="Views\MusicActions.cs" />
+    <Compile Include="Controls\AlbumGridView.xaml.cs">
+      <DependentUpon>AlbumGridView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LibraryListView.xaml.cs">
+      <DependentUpon>LibraryListView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\LibraryView.xaml.cs">
+      <DependentUpon>LibraryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MusicCategory.xaml.cs">
+      <DependentUpon>MusicCategory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MusicCollection.xaml.cs">
+      <DependentUpon>MusicCollection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MusicLibrary.xaml.cs">
+      <DependentUpon>MusicLibrary.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonRadio.cs" />
     <Compile Include="Controls\ButtonCheck.cs" />
     <Compile Include="Controls\Button.cs" />
@@ -162,6 +188,34 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\AlbumGridView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LibraryListView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\LibraryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MusicCategory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MusicCollection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MusicLibrary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\Library\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -301,6 +355,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Dialog\Background.png" />
+    <Resource Include="Resources\Dialog\Background.Header.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\General\Audio.NoCover.png" />

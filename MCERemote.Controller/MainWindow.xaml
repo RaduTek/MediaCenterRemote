@@ -13,7 +13,7 @@
         Foreground="White" 
         Loaded="Window_Loaded"
         Closing="Window_Closing"
-        Cursor="None">
+        >
     <Grid>
         <Border>
             <Border.Background>
@@ -27,9 +27,6 @@
 
             <Layout:NowPlayingOverlay x:Name="NowPlayingOverlay" />
 
-            <Layout:LoadingOverlay x:Name="LoadingOverlay"
-                                   IsActive="{Binding ElementName=ViewFrame, Path=Content.IsLoading, FallbackValue=False}" />
-
             <Layout:ControlBar x:Name="ControlBar" />
         </Grid>
 
@@ -37,6 +34,8 @@
                                 Opened="DialogHost_Opened" 
                                 Closed="DialogHost_Closed" />
 
+        <Layout:LoadingOverlay x:Name="LoadingOverlay"
+                                   IsActive="{Binding ElementName=ViewFrame, Path=Content.IsLoading, FallbackValue=False}" />
 
         <Layout:TitleBar x:Name="TitleBar" 
                              CanGoToStart="False" 

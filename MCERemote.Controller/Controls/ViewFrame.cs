@@ -34,6 +34,11 @@ namespace MCERemote.Controller.Controls
         public Connection Connection { get; set; }
 
         /// <summary>
+        /// Gets or sets the host that pages show dialogs and menus in.
+        /// </summary>
+        internal DialogHost DialogHost { get; set; }
+
+        /// <summary>
         /// Event raised when the navigation history changes.
         /// </summary>
         public event EventHandler HistoryChanged;

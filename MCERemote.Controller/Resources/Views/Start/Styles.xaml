@@ -70,7 +70,7 @@
                             </Border>
                             <Grid Margin="{TemplateBinding Padding}" ClipToBounds="True">
                                 <Image x:Name="tileImage" Source="{TemplateBinding Image}" Style="{StaticResource Start.Tile.Image}" />
-                                <ContentPresenter x:Name="tileText" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+                                <ContentPresenter x:Name="tileText" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3,0,0,0" />
                             </Grid>
                         </Grid>
                     </Border>

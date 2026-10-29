@@ -18,6 +18,7 @@ namespace MCERemote.Controller
 
         Views.Start start;
         Views.NowPlaying nowPlaying;
+        Views.MusicLibrary musicLibrary;
         Connection connection;
         Controls.Dialog connectingDialog;
 
@@ -33,6 +34,8 @@ namespace MCERemote.Controller
             };
 
             Connection_Init();
+
+            ViewFrame.DialogHost = DialogHost;
 
             start = new Views.Start();
             start.ItemInvoked += Start_ItemInvoked;
@@ -86,6 +89,12 @@ namespace MCERemote.Controller
                     if (nowPlaying == null)
                         nowPlaying = new Views.NowPlaying();
                     ViewFrame.OpenPage(nowPlaying);
+                    break;
+
+                case Views.StartItem.Music:
+                    if (musicLibrary == null)
+                        musicLibrary = new Views.MusicLibrary();
+                    ViewFrame.OpenPage(musicLibrary);
                     break;
 
                 case Views.StartItem.Settings:

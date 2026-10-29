@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IControllerService.cs" />
+    <Compile Include="Library.cs" />
     <Compile Include="MediaInfo.cs" />
     <Compile Include="PlayerAction.cs" />
     <Compile Include="PlayerState.cs" />

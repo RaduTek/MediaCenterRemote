@@ -255,7 +255,7 @@ namespace MCERemote.Controller.Views
             queue.RequestRange(first + visible / 2);
         }
 
-        private void Queue_RangeLoaded(object sender, QueueRangeLoadedEventArgs e)
+        private void Queue_RangeLoaded(object sender, RangeLoadedEventArgs e)
         {
             var position = awaitedQueuePosition;
             if (position == 0 || position < e.Start || position >= e.Start + e.Count)
@@ -346,20 +346,7 @@ namespace MCERemote.Controller.Views
         /// </summary>
         private void UpdateQueueListHeight()
         {
-            if (queueItemHeight <= 0 && QueueLength > 0)
-            {
-                QueueList.UpdateLayout();
-                var container = QueueList.ItemContainerGenerator.ContainerFromIndex(0) as FrameworkElement;
-                if (container != null && container.ActualHeight > 0)
-                    queueItemHeight = container.ActualHeight + container.Margin.Top + container.Margin.Bottom;
-            }
-
-            if (queueItemHeight <= 0)
-                return;
-
-            var available = QueueArea.ActualHeight;
-            var count = Math.Max(1, Math.Floor(available / queueItemHeight));
-            QueueList.Height = count * queueItemHeight;
+            Controls.ListFitter.FitToWholeItems(QueueList, QueueArea, ref queueItemHeight);
         }
 
         private void QueueArea_SizeChanged(object sender, SizeChangedEventArgs e)

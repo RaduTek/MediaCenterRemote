@@ -1,0 +1,104 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:Controls="clr-namespace:MCERemote.Controller.Controls">
+
+    <!--#region List Rows-->
+
+    <!-- Song row: title, artist and duration. Placeholders show "Loading..." until loaded -->
+    <DataTemplate x:Key="Library.SongTemplate">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="TitleText" Grid.Column="0" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="LoadingText" Grid.Column="0" Text="Loading..." Foreground="#8FFF" Visibility="Collapsed" />
+            <TextBlock x:Name="ArtistText" Grid.Column="1" Text="{Binding Subtitle}" Foreground="#8FFF" MaxWidth="200"
+                       TextTrimming="CharacterEllipsis" Margin="15 0 0 0" />
+            <TextBlock x:Name="DurationText" Grid.Column="2" Text="{Binding DurationText}" Foreground="#8FFF" Margin="15 0 0 0" />
+        </Grid>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsLoaded}" Value="False">
+                <Setter TargetName="LoadingText" Property="Visibility" Value="Visible" />
+                <Setter TargetName="TitleText" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="ArtistText" Property="Visibility" Value="Collapsed" />
+                <Setter TargetName="DurationText" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <!-- Name only row, for artists, genres and playlists -->
+    <DataTemplate x:Key="Library.NameTemplate">
+        <Grid>
+            <TextBlock x:Name="TitleText" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+            <TextBlock x:Name="LoadingText" Text="Loading..." Foreground="#8FFF" Visibility="Collapsed" />
+        </Grid>
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsLoaded}" Value="False">
+                <Setter TargetName="LoadingText" Property="Visibility" Value="Visible" />
+                <Setter TargetName="TitleText" Property="Visibility" Value="Collapsed" />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <!--#endregion-->
+
+    <!--#region Album Grid-->
+
+    <!-- A row of the album grid holds no visuals of its own and can't take focus, its tiles can -->
+    <Style x:Key="Library.Grid.Row" TargetType="ListBoxItem">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <ContentPresenter />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <DataTemplate x:Key="Library.AlbumTileTemplate">
+        <Controls:TileButton x:Name="Tile" Image="{Binding CoverImage}" Content="{Binding Title}" />
+
+        <DataTemplate.Triggers>
+            <DataTrigger Binding="{Binding IsLoaded}" Value="False">
+                <Setter TargetName="Tile" Property="Content" Value="Loading..." />
+            </DataTrigger>
+        </DataTemplate.Triggers>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Library.Grid.RowTemplate">
+        <ItemsControl ItemsSource="{Binding Entries}" Focusable="False"
+                      ItemTemplate="{StaticResource Library.AlbumTileTemplate}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </DataTemplate>
+
+    <!--#endregion-->
+
+    <!--#region Collection Header-->
+
+    <Style x:Key="Library.Header" TargetType="Grid">
+        <!--<Setter Property="Margin" Value="0 0 0 12" />-->
+    </Style>
+
+    <Style x:Key="Library.Header.Cover" TargetType="Border">
+        <Setter Property="Background" Value="Black" />
+        <Setter Property="Width" Value="90" />
+        <Setter Property="Height" Value="90" />
+        <Setter Property="Margin" Value="0 0 15 0" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+    </Style>
+
+    <!--#endregion-->
+
+</ResourceDictionary>

@@ -9,6 +9,7 @@
                 <ResourceDictionary Source="Resources/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Dialog/Styles.xaml" />
                 <ResourceDictionary Source="Resources/Page/Styles.xaml" />
+                <ResourceDictionary Source="Resources/Library/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

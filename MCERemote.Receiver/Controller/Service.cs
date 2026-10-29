@@ -507,6 +507,70 @@ namespace MCERemote.Receiver.Controller
             return range;
         }
 
+        private static Library library;
+
+        private static Library GetLibrary()
+        {
+            return library ?? (library = new Library(player));
+        }
+
+        /// <summary>
+        /// Replaces the playback queue with a new temporary one holding only the given media,
+        /// and plays it. A new playlist is used so a saved playlist is never cleared.
+        /// </summary>
+        private static void PlayInNewQueue(IWMPMedia media)
+        {
+            var queue = player.newPlaylist("", "");
+            queue.appendItem(media);
+            player.currentPlaylist = queue;
+            player.controls.playItem(queue.Item[0]);
+        }
+
+        private static bool IsSavedPlaylist(IWMPPlaylist playlist)
+        {
+            var name = playlist.name;
+            if (string.IsNullOrEmpty(name))
+                return false;
+
+            var saved = player.playlistCollection.getByName(name);
+            var count = saved.count;
+            for (int i = 0; i < count; i++)
+            {
+                if (saved.Item(i).isIdentical[playlist])
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Makes a temporary copy of the queue the current one, continuing playback from the
+        /// same item and position.
+        /// </summary>
+        private static IWMPPlaylist CopyToTemporaryQueue(IWMPPlaylist queue)
+        {
+            var count = queue.count;
+            var position = FindQueuePosition(queue, player.currentMedia, count);
+            var seconds = player.controls.currentPosition;
+            var wasPlaying = player.playState == WMPPlayState.wmppsPlaying;
+
+            var copy = player.newPlaylist("", "");
+            for (int i = 0; i < count; i++)
+                copy.appendItem(queue.Item[i]);
+
+            player.currentPlaylist = copy;
+
+            if (position > 0)
+            {
+                player.controls.playItem(copy.Item[position - 1]);
+                player.controls.currentPosition = seconds;
+                if (!wasPlaying)
+                    player.controls.pause();
+            }
+
+            return copy;
+        }
+
         private static PlaylistItem ToPlaylistItem(IWMPMedia item, int index)
         {
             return new PlaylistItem
@@ -531,6 +595,80 @@ namespace MCERemote.Receiver.Controller
                     return;
 
                 player.controls.playItem(playlist.Item[index - 1]);
+            }
+            catch
+            { }
+        }
+
+        public LibraryRange GetLibraryRange(LibraryQuery query, int start, int count, bool refresh)
+        {
+            if (!InitPlayer())
+                return new LibraryRange();
+
+            try
+            {
+                return GetLibrary().GetRange(query, start, count, refresh);
+            }
+            catch
+            {
+                return new LibraryRange();
+            }
+        }
+
+        public LibraryInfo GetLibraryInfo(LibraryQuery query)
+        {
+            if (!InitPlayer())
+                return new LibraryInfo();
+
+            try
+            {
+                return GetLibrary().GetInfo(query);
+            }
+            catch
+            {
+                return new LibraryInfo();
+            }
+        }
+
+        public void PlaySong(string sourceURL)
+        {
+            if (!InitPlayer())
+                return;
+
+            try
+            {
+                var media = GetLibrary().FindSong(sourceURL);
+                if (media != null)
+                    PlayInNewQueue(media);
+            }
+            catch
+            { }
+        }
+
+        public void QueueSong(string sourceURL)
+        {
+            if (!InitPlayer())
+                return;
+
+            try
+            {
+                var media = GetLibrary().FindSong(sourceURL);
+                if (media == null)
+                    return;
+
+                var queue = player.currentPlaylist;
+                if (queue == null || queue.count == 0 || player.currentMedia == null)
+                {
+                    PlayInNewQueue(media);
+                    return;
+                }
+
+                // Appending to a saved playlist would change it in the library, so continue
+                // playback from a temporary copy instead
+                if (IsSavedPlaylist(queue))
+                    queue = CopyToTemporaryQueue(queue);
+
+                queue.appendItem(media);
             }
             catch
             { }

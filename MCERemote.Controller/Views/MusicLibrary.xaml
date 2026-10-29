@@ -1,0 +1,36 @@
+﻿<Controls:PageView x:Class="MCERemote.Controller.Views.MusicLibrary"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:Controls="clr-namespace:MCERemote.Controller.Controls"
+      mc:Ignorable="d"
+      d:DesignHeight="600" d:DesignWidth="1024"
+      Title="Music"
+      Loaded="PageView_Loaded">
+
+    <Grid>
+        <TextBlock Text="music" Style="{StaticResource Page.Background.Title}" />
+
+        <Controls:LayoutPrimary>
+            <Controls:LayoutTitle Text="MUSIC" Variant="Secondary" />
+            <Controls:LayoutTitle x:Name="ViewTitle" Text="Albums" />
+
+            <!-- View options at the top, search pinned to the bottom -->
+            <StackPanel x:Name="Sidebar" Grid.Row="3" Grid.Column="1" DockPanel.Dock="Top" PreviewKeyDown="Sidebar_PreviewKeyDown">
+                <Controls:ButtonRadio x:Name="AlbumsButton" Tag="Album" Click="ViewButton_Click">Albums</Controls:ButtonRadio>
+                <Controls:ButtonRadio x:Name="ArtistsButton" Tag="Artist" Click="ViewButton_Click">Artists</Controls:ButtonRadio>
+                <Controls:ButtonRadio x:Name="PlaylistsButton" Tag="Playlist" Click="ViewButton_Click">Playlists</Controls:ButtonRadio>
+                <Controls:ButtonRadio x:Name="SongsButton" Tag="Song" Click="ViewButton_Click">Songs</Controls:ButtonRadio>
+                <Controls:ButtonRadio x:Name="GenresButton" Tag="Genre" Click="ViewButton_Click">Genres</Controls:ButtonRadio>
+                <Controls:Button x:Name="SearchButton" IsEnabled="False">Search</Controls:Button>
+            </StackPanel>
+
+            <Controls:LibraryView x:Name="LibraryContent" Grid.Row="3" Grid.Column="3" Grid.ColumnSpan="2"
+                                  ItemInvoked="Content_ItemInvoked"
+                                  ExitLeft="Content_ExitLeft"
+                                  BusyChanged="Content_BusyChanged"
+                                  GotFocus="Content_GotFocus" />
+        </Controls:LayoutPrimary>
+    </Grid>
+</Controls:PageView>

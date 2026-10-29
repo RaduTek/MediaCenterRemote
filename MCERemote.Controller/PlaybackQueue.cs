@@ -2,28 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Threading;
 
 namespace MCERemote.Controller
 {
-    public class QueueRangeLoadedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// Gets the 1-based position of the first item of the range.
-        /// </summary>
-        public int Start { get; private set; }
-
-        public int Count { get; private set; }
-
-        public QueueRangeLoadedEventArgs(int start, int count)
-        {
-            Start = start;
-            Count = count;
-        }
-    }
-
     /// <summary>
     /// Client side copy of the receiver's playback queue. It always holds one item per
     /// queue entry, but item details are loaded lazily in chunks around the positions
@@ -32,19 +13,17 @@ namespace MCERemote.Controller
     /// </summary>
     public class PlaybackQueue
     {
-        /// <summary>
-        /// Number of items loaded per request, centered on the requested position.
-        /// </summary>
-        public const int ChunkSize = 50;
-
-        /// <summary>
-        /// Maximum number of requests waiting to be loaded, older ones are dropped.
-        /// </summary>
-        private const int MaxPendingRequests = 4;
-
         public PlaybackQueue(Connection connection)
         {
             this.connection = connection;
+
+            items = new ResizableCollection<QueueItem>(index => new QueueItem(index));
+            loader = new ChunkLoader<List<PlaylistItem>>(connection,
+                () => Length,
+                index => items[index - 1].IsLoaded,
+                (controller, start, count) => controller.GetQueueRange(start, count),
+                ApplyRange);
+            loader.RangeLoaded += (s, e) => RangeLoaded?.Invoke(this, e);
 
             connection.QueueLengthChanged += Connection_QueueLengthChanged;
             connection.NowPlayingChanged += Connection_NowPlayingChanged;
@@ -55,18 +34,9 @@ namespace MCERemote.Controller
 
         private readonly Connection connection;
 
-        private readonly ItemCollection items = new ItemCollection();
+        private readonly ResizableCollection<QueueItem> items;
 
-        // Incremented whenever loaded details become invalid, so results of older requests are ignored
-        private int generation = 0;
-
-        // Requests waiting to be loaded, newest last so it is loaded first
-        private readonly List<Range> pending = new List<Range>();
-
-        // Positions that are pending or being loaded, so they aren't requested twice
-        private readonly HashSet<int> requested = new HashSet<int>();
-
-        private bool isLoading = false;
+        private readonly ChunkLoader<List<PlaylistItem>> loader;
 
         #endregion
 
@@ -97,7 +67,7 @@ namespace MCERemote.Controller
         /// <summary>
         /// Raised when a requested range finished loading, even if loading failed.
         /// </summary>
-        public event EventHandler<QueueRangeLoadedEventArgs> RangeLoaded;
+        public event EventHandler<RangeLoadedEventArgs> RangeLoaded;
 
         #endregion
 
@@ -106,122 +76,28 @@ namespace MCERemote.Controller
         /// <summary>
         /// Gets whether all items in the chunk around the given position are loaded.
         /// </summary>
-        public bool IsRangeLoaded(int center)
-        {
-            var range = GetChunk(center);
-            for (int index = range.Start; index < range.Start + range.Count; index++)
-            {
-                if (!items[index - 1].IsLoaded)
-                    return false;
-            }
-            return true;
-        }
+        public bool IsRangeLoaded(int center) => loader.IsRangeLoaded(center);
 
         /// <summary>
         /// Loads the chunk of items around the given 1-based position in the background,
         /// skipping items that are already loaded or requested.
         /// </summary>
-        public void RequestRange(int center)
-        {
-            if (Length == 0)
-                return;
-
-            var chunk = GetChunk(center);
-
-            // Trim the edges that don't need loading
-            var start = chunk.Start;
-            var end = chunk.Start + chunk.Count - 1;
-            while (start <= end && IsLoadedOrRequested(start))
-                start++;
-            while (end >= start && IsLoadedOrRequested(end))
-                end--;
-
-            if (start > end)
-                return;
-
-            var range = new Range(start, end - start + 1);
-            for (int index = range.Start; index <= end; index++)
-                requested.Add(index);
-
-            pending.Add(range);
-
-            if (pending.Count > MaxPendingRequests)
-            {
-                // Drop the oldest request, it's likely no longer on screen
-                var dropped = pending[0];
-                pending.RemoveAt(0);
-                for (int index = dropped.Start; index < dropped.Start + dropped.Count; index++)
-                    requested.Remove(index);
-            }
-
-            LoadNext();
-        }
+        public void RequestRange(int center) => loader.Request(center);
 
         #endregion
 
         #region Private Methods
 
-        private bool IsLoadedOrRequested(int index)
+        private void ApplyRange(int start, int count, List<PlaylistItem> loaded)
         {
-            return items[index - 1].IsLoaded || requested.Contains(index);
-        }
-
-        private Range GetChunk(int center)
-        {
-            var count = Math.Min(ChunkSize, Length);
-            var start = center - ChunkSize / 2;
-            start = Math.Max(1, Math.Min(start, Length - count + 1));
-            return new Range(start, count);
-        }
-
-        private void LoadNext()
-        {
-            if (isLoading || pending.Count == 0)
+            if (loaded == null)
                 return;
 
-            var range = pending[pending.Count - 1];
-            pending.RemoveAt(pending.Count - 1);
-
-            var controller = connection.Controller;
-            var loadGeneration = generation;
-            isLoading = true;
-
-            ThreadPool.QueueUserWorkItem(_ =>
+            foreach (var item in loaded)
             {
-                List<PlaylistItem> loaded = null;
-
-                try
-                {
-                    loaded = controller?.GetQueueRange(range.Start, range.Count);
-                }
-                catch
-                { }
-
-                App.Current.Dispatcher.Invoke((Action)(() =>
-                {
-                    isLoading = false;
-
-                    // The queue changed while loading, so the results are outdated
-                    if (loadGeneration == generation)
-                    {
-                        for (int index = range.Start; index < range.Start + range.Count; index++)
-                            requested.Remove(index);
-
-                        if (loaded != null)
-                        {
-                            foreach (var item in loaded)
-                            {
-                                if (item.Index >= 1 && item.Index <= Length)
-                                    items[item.Index - 1].Update(item);
-                            }
-                        }
-
-                        RangeLoaded?.Invoke(this, new QueueRangeLoadedEventArgs(range.Start, range.Count));
-                    }
-
-                    LoadNext();
-                }));
-            });
+                if (item.Index >= 1 && item.Index <= Length)
+                    items[item.Index - 1].Update(item);
+            }
         }
 
         /// <summary>
@@ -229,9 +105,7 @@ namespace MCERemote.Controller
         /// </summary>
         private void InvalidateAll()
         {
-            generation++;
-            pending.Clear();
-            requested.Clear();
+            loader.Invalidate();
 
             foreach (var item in items)
                 item.Invalidate();
@@ -296,45 +170,6 @@ namespace MCERemote.Controller
         private void Connection_PlayerStatusUpdated(object sender, PlayerStatusUpdatedEventArgs e)
         {
             SetCurrentPosition(e.PlayerStatus.QueuePosition);
-        }
-
-        #endregion
-
-        #region Nested Types
-
-        private struct Range
-        {
-            public Range(int start, int count)
-            {
-                Start = start;
-                Count = count;
-            }
-
-            public int Start;
-            public int Count;
-        }
-
-        /// <summary>
-        /// Collection that can be resized with a single reset notification, rather than
-        /// one notification per item, which would be slow for long queues.
-        /// </summary>
-        private class ItemCollection : ObservableCollection<QueueItem>
-        {
-            public void Resize(int length)
-            {
-                if (length == Count)
-                    return;
-
-                while (Items.Count > length)
-                    Items.RemoveAt(Items.Count - 1);
-
-                while (Items.Count < length)
-                    Items.Add(new QueueItem(Items.Count + 1));
-
-                OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            }
         }
 
         #endregion

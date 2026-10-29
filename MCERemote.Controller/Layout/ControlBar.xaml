@@ -27,7 +27,7 @@
 
             <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                 
-                <StackPanel Orientation="Horizontal" Width="138" Margin="5,0">
+                <StackPanel Orientation="Horizontal" Width="138" Margin="5,0" Visibility="Collapsed">
                     <StackPanel.Background>
                         <ImageBrush ImageSource="../Resources/ControlBar/Group.2.Ch.png" />
                     </StackPanel.Background>

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace MCERemote.Controller.Controls
 {
@@ -22,12 +23,81 @@ namespace MCERemote.Controller.Controls
         }
     }
 
-    internal class Dialog : ItemsControl
+    /// <summary>
+    /// Base of dialogs shown by a <see cref="DialogHost"/>.
+    /// </summary>
+    internal abstract class DialogBase : ItemsControl
+    {
+        protected DialogBase()
+        {
+            Style = FindResource("Dialog.Body") as Style;
+        }
+
+        public DialogHost Host { get; set; }
+
+        public bool IsOpen { get; private set; }
+
+        public event EventHandler<DialogClosedEventArgs> Closed;
+        public event EventHandler Opened;
+
+        /// <summary>
+        /// Gets the resource key of the backdrop brush drawn behind the dialog.
+        /// </summary>
+        public virtual string BackdropKey => "Dialog.Backdrop";
+
+        /// <summary>
+        /// Gets whether clicking the backdrop outside the dialog closes it.
+        /// </summary>
+        public virtual bool CloseOnBackdropClick => false;
+
+        public void Open()
+        {
+            OnOpening();
+
+            Visibility = Visibility.Visible;
+            IsOpen = true;
+
+            var control = GetInitialFocus();
+            if (control != null)
+            {
+                control.Focus();
+                Keyboard.Focus(control);
+            }
+
+            Opened?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void Close(DialogButtonType button = DialogButtonType.None)
+        {
+            Visibility = Visibility.Collapsed;
+            IsOpen = false;
+            Host.CloseDialog();
+            Closed?.Invoke(this, new DialogClosedEventArgs(button));
+        }
+
+        /// <summary>
+        /// Called before the dialog is shown, to prepare its contents.
+        /// </summary>
+        protected virtual void OnOpening()
+        {
+        }
+
+        /// <summary>
+        /// Gets the control focused when the dialog opens, if any.
+        /// </summary>
+        protected virtual Control GetInitialFocus()
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// A message dialog with a title, text and up to two buttons.
+    /// </summary>
+    internal class Dialog : DialogBase
     {
         public Dialog()
         {
-            Style = FindResource("Dialog.Body") as Style;
-
             InitializeComponents();
         }
 
@@ -64,13 +134,6 @@ namespace MCERemote.Controller.Controls
             Close(button);
         }
 
-        public DialogHost Host { get; set; }
-
-        public bool IsOpen { get; private set; }
-
-        public event EventHandler<DialogClosedEventArgs> Closed;
-        public event EventHandler Opened;
-
         public string Title
         {
             get => title.Text;
@@ -97,7 +160,7 @@ namespace MCERemote.Controller.Controls
             set => button2.Content = _Button2Text = value;
         }
 
-        public void Open()
+        protected override void OnOpening()
         {
             buttons.Items.Clear();
 
@@ -112,33 +175,24 @@ namespace MCERemote.Controller.Controls
                 buttons.Items.Insert(0, new Grid());
             else
                 buttons.Visibility = Visibility.Visible;
-
-            Visibility = Visibility.Visible;
-            IsOpen = true;
-
-            if (buttons.Items.Count > 0)
-            {
-                var control = buttons.Items[0] as Control;
-                control?.Focus();
-                Keyboard.Focus(control);
-            }
-
-            Opened?.Invoke(this, EventArgs.Empty);
         }
 
-        public void Close(DialogButtonType button = DialogButtonType.None)
+        protected override Control GetInitialFocus()
         {
-            Visibility = Visibility.Collapsed;
-            IsOpen = false;
-            Host.CloseDialog();
-            Closed?.Invoke(this, new DialogClosedEventArgs(button));
+            // With one button, a spacer is inserted before it
+            foreach (var item in buttons.Items)
+            {
+                if (item is Control control)
+                    return control;
+            }
+            return null;
         }
     }
 
     internal class DialogHostEventArgs : EventArgs
     {
-        public Dialog Dialog { get; set; }
-        public DialogHostEventArgs(Dialog dialog)
+        public DialogBase Dialog { get; set; }
+        public DialogHostEventArgs(DialogBase dialog)
         {
             Dialog = dialog;
         }
@@ -154,19 +208,42 @@ namespace MCERemote.Controller.Controls
         public event EventHandler<DialogHostEventArgs> Closed;
         public event EventHandler<DialogHostEventArgs> Opened;
 
-        public void ShowDialog(Dialog dialog)
+        public void ShowDialog(DialogBase dialog)
         {
             dialog.Host = this;
             Content = dialog;
-            dialog.Open();
+            Background = FindResource(dialog.BackdropKey) as Brush;
+
+            // The host must be visible and laid out before the dialog opens, or focusing its
+            // first control fails and the dialog doesn't receive key presses
             Visibility = Visibility.Visible;
+            UpdateLayout();
+
+            dialog.Open();
 
             Opened?.Invoke(this, new DialogHostEventArgs(dialog));
         }
 
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            var dialog = Content as DialogBase;
+            var source = e.OriginalSource as Visual;
+            if (dialog == null || !dialog.CloseOnBackdropClick || source == null)
+                return;
+
+            // Clicked the backdrop rather than the dialog itself
+            if (source != dialog && !dialog.IsAncestorOf(source))
+            {
+                dialog.Close();
+                e.Handled = true;
+            }
+        }
+
         public void CloseDialog()
         {
-            Dialog dialog = Content as Dialog;
+            var dialog = Content as DialogBase;
             if (dialog != null)
             {
                 if (dialog.IsOpen)
